@@ -1,3 +1,4 @@
+// here in this project for fake data we used dummy json website which provides us product data as a dummy data , full json file where if you put 100 after ? in the url it will give you 100 products and yes we just
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
