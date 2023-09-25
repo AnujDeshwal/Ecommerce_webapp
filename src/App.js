@@ -1,11 +1,8 @@
 import React from 'react';
 import Home from './pages/Home';
-import './App.css';
 import {
   createBrowserRouter,
   RouterProvider,
-  Route,
-  Link,
 } from "react-router-dom";
 import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
@@ -35,7 +32,7 @@ const router = createBrowserRouter([
     element: <CheckOut/>,
   },
   {
-    path: "/product-details",
+    path: "/product-details/:id",
     element: <ProductDetailPage/>,
   },
 ]);

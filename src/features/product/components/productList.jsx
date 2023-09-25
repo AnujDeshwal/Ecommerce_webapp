@@ -1,15 +1,15 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
 import {
-  fetchAllProductsAsync, fetchAllProductsByFilterAsync,
+  fetchAllProductsAsync, fetchAllProductsByFilterAsync, fetchBrandsAsync, fetchCategoriesAsync, fetchDetailsAsync,
 } from '../productSlice';
-
+import { ITEMS_PER_PAGE } from '../../../app/constants';
 import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon, StarIcon } from '@heroicons/react/20/solid'
 import { NavLink } from 'react-router-dom';
-import fetchAllProducts from '../productListApi';
+import fetchAllProducts, { fetchBrands, fetchCategories } from '../productListApi';
 
 const sortOptions = [
   // of course best rating means on the top highest rated products should lie 
@@ -19,82 +19,7 @@ const sortOptions = [
   { name: 'Price: High to Low', sort: 'price', order: 'desc', current: false },
 ]
 
-const filters = [
-  {
-    id: 'brand',
-    name: 'Brands',
-    // so get to know how we are getting this data of options so go to test.js 
-    options: [
-      { value: 'Apple', label: 'Apple', checked: false },
-      { value: 'Samsung', label: 'Samsung', checked: false },
-      { value: 'OPPO', label: 'OPPO', checked: false },
-      { value: 'Huawei', label: 'Huawei', checked: false },
-      {
-        value: 'Microsoft Surface',
-        label: 'Microsoft Surface',
-        checked: false
-      },
-      { value: 'Infinix', label: 'Infinix', checked: false },
-      { value: 'HP Pavilion', label: 'HP Pavilion', checked: false },
-      {
-        value: 'Impression of Acqua Di Gio',
-        label: 'Impression of Acqua Di Gio',
-        checked: false
-      },
-      { value: 'Royal_Mirage', label: 'Royal_Mirage', checked: false },
-      {
-        value: 'Fog Scent Xpressio',
-        label: 'Fog Scent Xpressio',
-        checked: false
-      },
-      { value: 'Al Munakh', label: 'Al Munakh', checked: false },
-      {
-        value: 'Lord - Al-Rehab',
-        label: 'Lord   Al Rehab',
-        checked: false
-      },
-      { value: "L'Oreal Paris", label: "L'Oreal Paris", checked: false },
-      { value: 'Hemani Tea', label: 'Hemani Tea', checked: false },
-      { value: 'Dermive', label: 'Dermive', checked: false },
-      {
-        value: 'ROREC White Rice',
-        label: 'ROREC White Rice',
-        checked: false
-      },
-      { value: 'Fair & Clear', label: 'Fair & Clear', checked: false },
-      { value: 'Saaf & Khaas', label: 'Saaf & Khaas', checked: false },
-      {
-        value: 'Bake Parlor Big',
-        label: 'Bake Parlor Big',
-        checked: false
-      },
-      {
-        value: 'Baking Food Items',
-        label: 'Baking Food Items',
-        checked: false
-      },
-      { value: 'fauji', label: 'fauji', checked: false },
-      { value: 'Dry Rose', label: 'Dry Rose', checked: false },
-      { value: 'Boho Decor', label: 'Boho Decor', checked: false },
-      { value: 'Flying Wooden', label: 'Flying Wooden', checked: false },
-      { value: 'LED Lights', label: 'LED Lights', checked: false },
-      { value: 'luxury palace', label: 'luxury palace', checked: false },
-      { value: 'Golden', label: 'Golden', checked: false }
-    ],
-  },
-  {
-    id: 'category',
-    name: 'Category',
-    options: [
-      { value: 'smartphones', label: 'smartphones', checked: false },
-      { value: 'laptops', label: 'laptops', checked: false },
-      { value: 'fragrances', label: 'fragrances', checked: false },
-      { value: 'skincare', label: 'skincare', checked: false },
-      { value: 'groceries', label: 'groceries', checked: false },
-      { value: 'home-decoration', label: 'home decoration', checked: false }
-    ],
-  },
-]
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -102,9 +27,29 @@ function classNames(...classes) {
 
 export default function ProductList() {
   const products = useSelector(state => state.product.products);
+  const totalItems = useSelector(state => state.product.totalItems);
+  const brands = useSelector(state => state.product.brands);
+  const categories = useSelector(state => state.product.categories);
+// initially filters was global now i am taking it from useSelector so now only this compnent has access of these fiilters but i have others components too to work with filter there i will send it as props 
+  const filters = [
+    {
+      id: 'brand',
+      name: 'Brands',
+      options:brands,
+    },
+    {
+      id: 'category',
+      name: 'Category',
+      options:categories,
+    },
+  ]
+
+  
   const dispatch = useDispatch();
   const [filter, setFilter] = useState({});
   const [sort, setSort] = useState({});
+  // By default Page:1 or first page would be shown from pagination 
+  const [page , setPage]= useState(1);
   // very importanat that you know action tells what to do then and reducer tells how to do but for combining both we always use dispatch means completing the action , whenever we modify the state always we will use dispatch ,now you know here we do not have button that as soon as we visit the website and press the button then we will get all product no as soon as we visite website we want it so of course here useEffect come to play a important role
   const handleFilter = (e, section, option) => {
     // here section is like which is main element during iterating the filters  so from the id we get the which type of filter is it like brand , category 
@@ -138,11 +83,27 @@ export default function ProductList() {
     const newSort = { _sort: option.sort, _order: option.order };
     setSort(newSort);
   }
+  const handlePage=( page)=>{
+    setPage(page)
+  }
   useEffect(() => {
-    dispatch(fetchAllProductsByFilterAsync(filter ,sort));
+    const pagination  = {_page:page,_limit:ITEMS_PER_PAGE};
+    // In Redux Toolkit's createAsyncThunk function, you cannot directly pass multiple parameters to the thunk function without using an object as the sole argument.
+    dispatch(fetchAllProductsByFilterAsync({filter ,sort ,pagination }));
+    
     // here as soon as dispatch and filter would have some changes useEffect will be called itself 
-  }, [ dispatch , filter , sort]);
+  }, [ dispatch , filter , sort , page]);
   // below useState is used to open and close some filters 
+  // this below useEffect is for ki koi filter lagaya toh then first page mai hi aa jaye kuki koi agar vo page9 mai hai and us page mai filter vaala elem hai hi nahi toh vo toh shuruwaat ke pages mai hi hoga api sirf usi element ko fetch karegi totalItems ka count bhi badal jayega apple ke jitne device honge utne hi totalIems honge as an example 
+  useEffect(()=>{
+    setPage(1);
+    // sorting mai isliye kiya because first page mai hi sabse upar rating vaale honge if user is in page9 and use i page mai sabse jyada rating vaale dikhe so this is not that convenient baad mai page9 mai khud jaa sakta hai vo 
+  } , [totalItems,sort]);
+
+  useEffect(()=>{
+    dispatch(fetchBrandsAsync());
+    dispatch(fetchCategoriesAsync());
+  },[])
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   return (
     <div>
@@ -151,7 +112,7 @@ export default function ProductList() {
       <div className="bg-white">
         <div>
         {/* ================== here one thing should be rememebered that we are sending props because here mobileFiltersOpen and setMobileFiltersOpen are being used here as well in the MobileFilter also so you can not do like declaring them with the useState again in the Mobile filter no becaues there that would be another state or block restricted state so if you are passing it as props so same state would be used by both by this component and mobile filter component so similarly here a filter useStat is being used that state would have some filter info that till now which filters are used so that other filter will add on previouse filteres if we send handlefilter as props.  */}
-          <MobileFilter mobileFiltersOpen={mobileFiltersOpen} setMobileFiltersOpen={setMobileFiltersOpen} handleFilter={handleFilter} ></MobileFilter>
+          <MobileFilter mobileFiltersOpen={mobileFiltersOpen} setMobileFiltersOpen={setMobileFiltersOpen} handleFilter={handleFilter} filters={filters} ></MobileFilter>
 
           <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
@@ -221,7 +182,7 @@ export default function ProductList() {
               {/* //filters for larget screen  */}
               <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
                 {/* Filters */}
-                <DesktopFilter handleFilter={handleFilter}></DesktopFilter>
+                <DesktopFilter handleFilter={handleFilter} filters={filters}></DesktopFilter>
 
                 {/* Product grid or displaying the product*/}
                 <ProductGrid products={products}></ProductGrid>
@@ -230,7 +191,7 @@ export default function ProductList() {
           </main>
           {/* here all the filters and product list ends  */}
           {/* ================================= pagination================================================ */}
-          <Pagination></Pagination>
+          <Pagination page={page} setPage={setPage} handlePage={handlePage} totalItems={totalItems}></Pagination>
         </div>
       </div>
 
@@ -238,7 +199,7 @@ export default function ProductList() {
   );
 }
 // you know rather than doing like const MobileFilter=(props)=>{ then use somewhere props.handleFilter} so directly do {handleFilter} means it is a field of props object 
-const MobileFilter = ({ mobileFiltersOpen, setMobileFiltersOpen, handleFilter }) => {
+const MobileFilter = ({ mobileFiltersOpen, setMobileFiltersOpen, handleFilter , filters }) => {
   return (
     <Transition.Root show={mobileFiltersOpen} as={Fragment}>
       <Dialog as="div" className="relative z-40 lg:hidden" onClose={setMobileFiltersOpen}>
@@ -333,7 +294,7 @@ const MobileFilter = ({ mobileFiltersOpen, setMobileFiltersOpen, handleFilter })
     </Transition.Root>
   )
 }
-const DesktopFilter = ({ handleFilter }) => {
+const DesktopFilter = ({ handleFilter ,filters}) => {
   return (<form className="hidden lg:block">
 
     {filters.map((section) => (
@@ -382,87 +343,70 @@ const DesktopFilter = ({ handleFilter }) => {
   </form>
   )
 }
-const Pagination = () => {
+const Pagination = ({page ,setPage ,handlePage ,totalItems}) => {
+  const totalPages = Math.ceil(totalItems/ITEMS_PER_PAGE);
   return (
     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
       <div className="flex flex-1 justify-between sm:hidden">
-        <a
-          href="#"
+        {/* mobile pagination  */}
+        <div
+          onClick={e=>handlePage(page>1?page-1:page)}
           className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
         >
           Previous
-        </a>
-        <a
-          href="#"
+        </div>
+        <div
+          onClick={e=>handlePage(page<totalPages?page+1:page)}
           className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
         >
           Next
-        </a>
+        </div>
       </div>
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <div>
           <p className="text-sm text-gray-700">
-            Showing <span className="font-medium">1</span> to <span className="font-medium">10</span> of{' '}
-            <span className="font-medium">97</span> results
+            {/* here it should be shown like first page is showing 1 to 10 products if ITEMS_PER_PAGE is 10 then second page 11 to 20 so on .  */}
+            Showing <span className="font-medium">{(page-1)*ITEMS_PER_PAGE+1}</span> to <span 
+            // agar results hi 2 hue and ITEMS_PER_PAGE is 10 toh filter mai esa ho sakta hai 
+            className="font-medium">{page*(ITEMS_PER_PAGE>totalItems?totalItems:ITEMS_PER_PAGE)}</span> of{' '}
+            <span className="font-medium">{totalItems}</span> results
           </p>
         </div>
         <div>
           <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-            <a
-              href="#"
+            <div
+              onClick={e=>handlePage(page>1?page-1:page)}
               className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
             >
               <span className="sr-only">Previous</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-            </a>
+            </div>
             {/* Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" */}
-            <a
-              href="#"
+            
+
+            {/* it is like fakeArray={length:5} it means i am declaring a array with lenght 5 it is not object here lenght is a keyword  */}
+               {/* here below i want to iterable which should itereate upto totapage it totalItems is 100 and ITEMS_PER_PAGE is 10 means totalPage is 10 so below loop should iterate 10 times so in the pageination from 1 to 10 block will be created to paginate  */}
+            {Array.from({length:totalPages}).map((el,index)=>{
+              return(
+                <div>
+                    <div
+              onClick={e=>handlePage(index+1)}
               aria-current="page"
-              className="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              className={`relative z-10 cursor-pointer inline-flex items-center ${index+1===page?'bg-indigo-600 text-white':'text-gray-400'}  px-4 py-2 text-sm font-semibold focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
             >
-              1
-            </a>
-            <a
-              href="#"
-              className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-            >
-              2
-            </a>
-            <a
-              href="#"
-              className="relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex"
-            >
-              3
-            </a>
-            <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0">
-              ...
-            </span>
-            <a
-              href="#"
-              className="relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex"
-            >
-              8
-            </a>
-            <a
-              href="#"
-              className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-            >
-              9
-            </a>
-            <a
-              href="#"
-              className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-            >
-              10
-            </a>
-            <a
-              href="#"
+              {index+1}
+            </div>
+                </div>
+              )
+            })}
+           
+            <div
+             onClick={e=>handlePage(page<totalPages?page+1:page)}
               className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
             >
               <span className="sr-only">Next</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-            </a>
+            </div>
           </nav>
         </div>
       </div>
@@ -470,6 +414,7 @@ const Pagination = () => {
   )
 }
 const ProductGrid = ({products}) => {
+ 
   return (
     // you should know the meaning of col-span-3 means firstly a grid would be used here and like col-5 would be give to the whole page and out of those five column only three column would be taken by product list i dont know if total column 5 or 6 , parent div would have this configuration 
     <div className="lg:col-span-3">
@@ -480,8 +425,9 @@ const ProductGrid = ({products}) => {
 
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
             {products.map((product) => (
-              <NavLink to='/product-details'>
-                <div key={product.id} className="group relative border-solid border-2 p-3 border-gray-200">
+              <NavLink to={`/product-details/${product.id}`}>
+                <div key={product.id} className="cursor-pointer group relative border-solid border-2 p-3 border-gray-200">
+
                   <div className="min-h-60 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
                     <img
                       src={product.thumbnail}

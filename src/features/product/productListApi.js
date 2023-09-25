@@ -13,9 +13,11 @@ export default function fetchAllProducts() {
 });
 }
 
-export  function fetchAllProductsByFilter(filter,sort) {
+export  function fetchAllProductsByFilter(filter,sort,pagination) {
+ 
   // here filter will come as object like //filter = {"category":["smartphones", "clothes"]}
   //sort ={_sort:"price",_order:"desc"}
+  //pagination={_page:1 , _limit=10}
   let queryString ="";
   for(let key in filter){
     // console.log(filter[key])
@@ -29,10 +31,40 @@ export  function fetchAllProductsByFilter(filter,sort) {
   for(let key in sort){
       queryString += `${key}=${sort[key]}&`
   }
+  // console.log("hereis"+pagination)
+  for(let key in pagination){
+
+      queryString += `${key}=${pagination[key]}&`
+  }
   
   return new Promise(async (resolve) =>{
     const response = await fetch(`http://localhost:8080/products?${queryString}`);
     const data = await response.json();
-    resolve({data});
+    const totalItems = await response.headers.get('X-Total-Count');
+    resolve({data:{products:data,totalItems:totalItems}});
 });
+}
+// we are not fetching brands and categories form the api 
+export  function fetchBrands() {
+  return new Promise(async (resolve) =>{
+    const response = await fetch(`http://localhost:8080/brands`);
+    const data = await response.json();
+    resolve({data});
+  });
+}
+export  function fetchCategories() {
+  return new Promise(async (resolve) =>{
+    const response = await fetch(`http://localhost:8080/categories`);
+    const data = await response.json();
+    resolve({data});
+  });
+}
+export  function fetchDetails(id) {
+  // console.log('anuj')
+  return new Promise(async (resolve) =>{
+    const response = await fetch(`http://localhost:8080/Products/${id}`);
+    const data = await response.json();
+    console.log("datais"+data)
+    resolve({data});
+  });
 }
