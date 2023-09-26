@@ -9,11 +9,12 @@ import LoginPage from './pages/LoginPage';
 import CartPage from './pages/cartPage';
 import CheckOut from './pages/Checkout';
 import ProductDetailPage from './pages/productDetailPage';
+import Protected from './features/auth/components/Protected';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home/>,
+    element: <Protected><Home/></Protected>,
   },
   {
     path: "/signin",
@@ -25,15 +26,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/cart",
-    element: <CartPage/>,
+    element: <Protected><CartPage/></Protected>,
   },
   {
     path: "/checkout",
-    element: <CheckOut/>,
+    element: <Protected><CheckOut/></Protected>,
   },
   {
     path: "/product-details/:id",
-    element: <ProductDetailPage/>,
+    element:<Protected><ProductDetailPage/></Protected> ,
   },
 ]);
 function App() {
