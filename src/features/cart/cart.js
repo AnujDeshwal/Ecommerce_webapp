@@ -3,33 +3,24 @@ import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { NavLink } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteItemFromCartAsync, updateItemAsync } from './cartSlice';
 
-const products = [
-    {
-        id: 1,
-        name: 'Throwback Hip Bag',
-        href: '#',
-        color: 'Salmon',
-        price: '$90.00',
-        quantity: 1,
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg',
-        imageAlt: 'Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.',
-    },
-    {
-        id: 2,
-        name: 'Medium Stuff Satchel',
-        href: '#',
-        color: 'Blue',
-        price: '$32.00',
-        quantity: 1,
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg',
-        imageAlt:
-            'Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.',
-    },
-    // More products...
-]
+
 const Cart = () => {
     const [open, setOpen] = useState(true)
+    const items = useSelector(state=>state.cart.items);
+    const dispatch = useDispatch();
+    // reduce() method in JavaScript is used to reduce the array to a single value and executes a provided function for each value of the array (from left to right) and the return value of the function is stored in an accumulator here accumulator is amount means as soon as first value is evaluated then you are adding accumulator value becasue it is type of += this previouse value is getting add  and accumulator is initialising as zero .
+    const totalAmount = items.reduce((amount,item)=>item.price*item.quantity + amount , 0);
+    const totalItems = items.reduce((total , item)=>item.quantity+total , 0);
+    const handleQuantity =(e,item)=>{
+        // here i put the + sign because value would come in string format and i want it in number so it will convert string to integer 
+        dispatch(updateItemAsync({...item , quantity:+e.target.value}))
+    }
+    const handleRemove =(e,itemid)=>{ 
+        dispatch(deleteItemFromCartAsync(itemid))
+    }
     return (
         <>
             <div className="mx-auto mt-5 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -37,12 +28,12 @@ const Cart = () => {
                 <div className="mt-8">
                     <div className="flow-root">
                         <ul role="list" className="-my-6 divide-y divide-gray-200">
-                            {products.map((product) => (
-                                <li key={product.id} className="flex py-6">
+                            {items.map((item) => (
+                                <li key={item.id} className="flex py-6">
                                     <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                         <img
-                                            src={product.imageSrc}
-                                            alt={product.imageAlt}
+                                            src={item.thumbnail}
+                                            alt={item.title}
                                             className="h-full w-full object-cover object-center"
                                         />
                                     </div>
@@ -51,21 +42,25 @@ const Cart = () => {
                                         <div>
                                             <div className="flex justify-between text-base font-medium text-gray-900">
                                                 <h3>
-                                                    <a href={product.href}>{product.name}</a>
+                                                    <a href={item.href}>{item.title}</a>
                                                 </h3>
-                                                <p className="ml-4">{product.price}</p>
+                                                <p className="ml-4">${item.price}</p>
                                             </div>
-                                            <p className="mt-1 text-sm text-gray-500">{product.color}</p>
+                                            <p className="mt-1 text-sm text-gray-500">{item.brand}</p>
                                         </div>
-                                        <div className="flex flex-1 items-end justify-between text-sm">
-                                            <div className="text-gray-500 ">Qty <select >
+                                        <div className="flex  flex-1 items-end justify-between text-sm">
+                                            <div className="text-gray-500  ">Qty 
+                                            {/* value isliye so that utni hi value select karne ke baad dikhaye  */}
+                                            <select className='ml-2' onChange={(e)=>handleQuantity(e,item)} value={item.quantity} >
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
                                                 </select></div>
 
                                             <div className="flex">
-                                                <button
+                                                <button onClick={e=>handleRemove(e,item.id)}
                                                     type="button"
                                                     className="font-medium text-indigo-600 hover:text-indigo-500"
                                                 >
@@ -80,10 +75,14 @@ const Cart = () => {
                     </div>
                 </div>
 
-                <div className="mx-auto  mt-5 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex  justify-between text-base font-medium text-gray-900">
+                <div className="border-t lg:px-0 border-gray-200 mt-7 py-4 sm:px-6">
+                    <div className="flex my-3 justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
-                        <p>$262.00</p>
+                        <p>${totalAmount}</p>
+                    </div>
+                    <div className="flex my-3 justify-between text-base font-medium text-gray-900">
+                        <p>Total Items</p>
+                        <p>{totalItems} items</p>
                     </div>
                     <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                     <div className="mt-6">

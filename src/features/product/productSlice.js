@@ -53,7 +53,7 @@ export const fetchDetailsAsync = createAsyncThunk(
   'product/fetchDetails',
   async (id) => {
     const response = await fetchDetails(id);
-    console.log("response.data:"+response.data)
+    // console.log("response.data:"+response.data)
     return response.data;
   }
 );

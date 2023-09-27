@@ -5,6 +5,7 @@ import { RadioGroup } from '@headlessui/react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchDetailsAsync } from '../productSlice';
+import { addToCartAsync } from '../../cart/cartSlice';
 
  
   const colors = [
@@ -39,12 +40,21 @@ const ProductDetails = () => {
   const params = useParams();
   useEffect(()=>{
     dispatch(fetchDetailsAsync(params.id));
-    console.log("hi")
+    // console.log("hi")
   } , [dispatch , params.id])
   const product = useSelector(state=>state.product.details)
- 
+  const user = useSelector(state=>state.auth.loggedInUser)
   const [selectedColor, setSelectedColor] = useState(colors[0])
   const [selectedSize, setSelectedSize] = useState(sizes[2])
+  const handleCart=(e)=>{
+    // konsa product kis user ne cart mai daala hai then cart vaale section mai particular bande ke saare saare cart items bhi usi user id se fetch karenge  
+    e.preventDefault();
+    // =============================very important thing ============================================
+    // now why using preventDefault basically here in the detail page on clicking add to cart button it is submitting the form konsa color,size and quantity or all that so submit karne mai browser khud se http request mart hai whenever browser sends http request page get refreshed because kya pata browser ne http request maar toh di but what if something is coming on response because request hai toh response bhi hoga so to take that response browser get reload the webpage toh ham is default behaviour ko rok rahe hai because brwoser http request maarega and then of course post hogi form sumbit ke case mai toh  if hamne api bana rakhi hai toh khud hi req.body mai aa jata that that was done by browser but here we do not want it becasue on sumbission mai ham khud fetch se http request maarke khud kar rahe hai response bhi khud hi laayenge so refresh ki jaroorat nahi 
+    // ---------------------MAIN PROBLEM -------------
+    // hai vese bhi ya main problem thi that add to cart button mai submit karne mai refresh hora and detail page is protected Protected.js mai jaake dekho so abhi cooki vagarey hai nahi toh user ki info gayab hori vo login page mai firse redirect kar de raha hai 
+      dispatch(addToCartAsync({...product ,quantity:1, user:user.id}))
+  }
 return(
          <>
          {/* All specifications of products  */}
@@ -245,7 +255,7 @@ return(
                 </RadioGroup>
               </div>
 
-              <button
+              <button onClick={handleCart}
                 type="submit"
                 className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >

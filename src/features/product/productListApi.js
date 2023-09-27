@@ -41,7 +41,7 @@ export  function fetchAllProductsByFilter(filter,sort,pagination) {
     const response = await fetch(`http://localhost:8080/products?${queryString}`);
     const data = await response.json();
     const totalItems = await response.headers.get('X-Total-Count');
-    resolve({data:{products:data,totalItems:totalItems}});
+    resolve({data:{products:data,totalItems:+totalItems}});
 });
 }
 // we are not fetching brands and categories form the api 
@@ -64,7 +64,7 @@ export  function fetchDetails(id) {
   return new Promise(async (resolve) =>{
     const response = await fetch(`http://localhost:8080/Products/${id}`);
     const data = await response.json();
-    console.log("datais"+data)
+    // console.log("datais"+data)
     resolve({data});
   });
 }

@@ -1,3 +1,4 @@
+useEffect karte wakt if dispatch kar rahe ho so use dispatch in the [] also otherwise it gives warning 
 topic:Simple APi call 
 very important that ek hota hai apne react app just start hi kiya and api call should be happened and all products should be fetched right now no filter has been applied so api call is executed first dispatch call the action function which do some action here in case of api call it always be a thunkAsync function in react and then that thunk func would be calling the api call function then data would be fetched and get updated in the state of store using the extraReducers then in the main file like productList file we will be calling the useSelector hook so that we can access the store and inside the store we would fetch that data and display it 
 topic:filter
