@@ -2,7 +2,7 @@ import React from 'react';
 import {useState} from 'react'
 import { NavLink, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteItemFromCartAsync, updateItemAsync } from '../features/cart/cartSlice';
+import { deleteItemFromCartAsync, resetCartAsync, updateItemAsync } from '../features/cart/cartSlice';
 import { useForm } from 'react-hook-form';
 import { updateUserAsync } from '../features/auth/authSlice';
 import { createOrderAsync } from '../features/order/orderSlice';
@@ -14,6 +14,7 @@ const CheckOut = () => {
     const user = useSelector(state=>state.auth.loggedInUser);
     const [open, setOpen] = useState(true)
     const items = useSelector(state=>state.cart.items);
+    const currentOrder = useSelector(state=>state.order.currentOrder);
     const dispatch = useDispatch();
     const {
         register,
@@ -42,13 +43,18 @@ const CheckOut = () => {
     }
     const handleOrder=(e)=>{
         console.log("hii")
-        const order = {items, totalAmount,totalItems , user,paymentMethod,selectedAddress}
+        const order = {items, totalAmount,totalItems , user,paymentMethod,
+            selectedAddress , status:'pending'//othere status can be delivered,received ,they would be selected by admin 
+    }
         dispatch(createOrderAsync(order));
+        // hamesa jabhi bhi order ho jaye so currentOrder ko bhi udana padega warna naya order karne jaoge current order mai poooran pada hai so direct vo order-success ke page mai lejayega chekout ni karne dega but if aapne resetCart and current order ko khali yahi kiya so dekho is page se nahi vo ordersucces mai jayega and direct vo pay and order karne mai homepage mai chale jayega item.length===0 dekho neeche it means ek baar ordersuccess page dikh jaye then kar sakte hai so order succes page mai hi ye sab karlo 
+        // dispatch(resetCartAsync());
     }
     return (
         <>
         {/* agar there is no elements in the carts it means cart is empty so no need to show cart it will redirect you to the hompage  */}
                 {items.length === 0 && <Navigate to ='/' replace={true}></Navigate>}
+                {currentOrder && <Navigate to ={`/order-success/${currentOrder.id}`}  replace={true}></Navigate>}
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="grid  grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
                     <div className="mt-5 mb-5 py-3 bg-white px-4 lg:col-span-3">

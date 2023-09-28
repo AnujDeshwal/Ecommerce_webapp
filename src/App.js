@@ -13,6 +13,8 @@ import Protected from './features/auth/components/Protected';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchItemsInCartByUserIdAsync } from './features/cart/cartSlice';
 import Page404 from './pages/404';
+import OrderSuccessPage from './pages/OrderSuccessPage';
+import UserOrdersPage from './pages/UserOrdersPage';
 
 const router = createBrowserRouter([
   {
@@ -36,8 +38,16 @@ const router = createBrowserRouter([
     element: <Protected><CheckOut/></Protected>,
   },
   {
+    path: "/order-success/:id",
+    element: <Protected><OrderSuccessPage></OrderSuccessPage></Protected>,
+  },
+  {
     path: "/product-details/:id",
     element:<Protected><ProductDetailPage/></Protected> ,
+  },
+  {
+    path: "/orders",
+    element: <Protected><UserOrdersPage></UserOrdersPage></Protected>,
   },
   {
     // it means astrick aapka saare path se match kar jaat hai sabse neeche hai so that by koi listed path mila toh redirect ho jayega varna * toh hai hi 

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import addToCart, { deleteItemFromCart, fetchItemsInCartByUserId,  updateItem } from './cartApi';
+import addToCart, { deleteItemFromCart, fetchItemsInCartByUserId,  resetCart,  updateItem } from './cartApi';
 
 const initialState = {
  items:[],
@@ -38,10 +38,21 @@ export const deleteItemFromCartAsync = createAsyncThunk(
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
-);
+  );
 
-
-export const addToCartSlice = createSlice({
+  export const resetCartAsync = createAsyncThunk(
+    // ya ye neeche waale naam hai saare different hone chahiye 
+    'cart/resetCart',
+    async (userid) => {
+      console.log("this is resetCartAsync")
+      const response = await resetCart(userid);
+      // The value we return becomes the `fulfilled` action payload
+      return response.status;
+    }
+  );
+  
+  
+  export const addToCartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
@@ -83,6 +94,14 @@ export const addToCartSlice = createSlice({
         state.status = 'idle';
         const index = state.items.findIndex(item=>item.id===action.payload.id);
         state.items.splice(index,1);
+      })
+      .addCase(resetCartAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(resetCartAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        // items khali kar sakte ho becuase it belongs to particular user so if order is successfully placed mean cart ke sabhi item ka order ho gaya hai so hatado but mai cart ko hi empty kar de raha tha from the api which was bad approach because different users items were there ,not of particular user 
+        state.items=[];
       })
   },
 });

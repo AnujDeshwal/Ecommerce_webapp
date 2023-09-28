@@ -2038,136 +2038,85 @@
     {
       "email": "sonia@gmail.com",
       "password": "@Sonia123",
-      "addresses": [],
+      "addresses": [
+        {
+          "name": "sonia",
+          "email": "sonia@gmail.com",
+          "phone": "09997164140",
+          "street": "dfddfd",
+          "city": "dfd",
+          "state": "dfd",
+          "pinCode": "fdf"
+        }
+      ],
       "id": 3
     }
   ],
-  "cart": [
-    {
-      "title": "iPhone 9",
-      "description": "An apple mobile which is nothing like apple",
-      "price": 549,
-      "discountPercentage": 12.96,
-      "rating": 4.69,
-      "stock": 94,
-      "brand": "Apple",
-      "category": "smartphones",
-      "thumbnail": "https://i.dummyjson.com/data/products/1/thumbnail.jpg",
-      "images": [
-        "https://i.dummyjson.com/data/products/1/1.jpg",
-        "https://i.dummyjson.com/data/products/1/2.jpg",
-        "https://i.dummyjson.com/data/products/1/3.jpg",
-        "https://i.dummyjson.com/data/products/1/4.jpg",
-        "https://i.dummyjson.com/data/products/1/thumbnail.jpg"
-      ],
-      "quantity": 1,
-      "user": 1,
-      "id": 1
-    },
-    {
-      "title": "iPhone 9",
-      "description": "An apple mobile which is nothing like apple",
-      "price": 549,
-      "discountPercentage": 12.96,
-      "rating": 4.69,
-      "stock": 94,
-      "brand": "Apple",
-      "category": "smartphones",
-      "thumbnail": "https://i.dummyjson.com/data/products/1/thumbnail.jpg",
-      "images": [
-        "https://i.dummyjson.com/data/products/1/1.jpg",
-        "https://i.dummyjson.com/data/products/1/2.jpg",
-        "https://i.dummyjson.com/data/products/1/3.jpg",
-        "https://i.dummyjson.com/data/products/1/4.jpg",
-        "https://i.dummyjson.com/data/products/1/thumbnail.jpg"
-      ],
-      "quantity": 1,
-      "user": 3,
-      "id": 2
-    }
-  ],
+  "cart": [],
   "orders": [
     {
       "items": [
         {
-          "title": "iPhone 9",
-          "description": "An apple mobile which is nothing like apple",
-          "price": 549,
-          "discountPercentage": 12.96,
-          "rating": 4.69,
-          "stock": 94,
+          "title": "iPhone X",
+          "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+          "price": 899,
+          "discountPercentage": 17.94,
+          "rating": 4.44,
+          "stock": 34,
           "brand": "Apple",
           "category": "smartphones",
-          "thumbnail": "https://i.dummyjson.com/data/products/1/thumbnail.jpg",
+          "thumbnail": "https://i.dummyjson.com/data/products/2/thumbnail.jpg",
           "images": [
-            "https://i.dummyjson.com/data/products/1/1.jpg",
-            "https://i.dummyjson.com/data/products/1/2.jpg",
-            "https://i.dummyjson.com/data/products/1/3.jpg",
-            "https://i.dummyjson.com/data/products/1/4.jpg",
-            "https://i.dummyjson.com/data/products/1/thumbnail.jpg"
+            "https://i.dummyjson.com/data/products/2/1.jpg",
+            "https://i.dummyjson.com/data/products/2/2.jpg",
+            "https://i.dummyjson.com/data/products/2/3.jpg",
+            "https://i.dummyjson.com/data/products/2/thumbnail.jpg"
           ],
           "quantity": 1,
           "user": 1,
           "id": 1
-        }
-      ],
-      "totalAmount": 549,
-      "totalItems": 1,
-      "user": {
-        "email": "anujdeshwal95@gmail.com",
-        "password": "@Deshwal95",
-        "addresses": [
-          {
-            "name": "Anuj",
-            "email": "anujdeshwal95@gmail.com",
-            "phone": "09997164140",
-            "street": "11th main ",
-            "city": "Rishikesh",
-            "state": "uttarakhand",
-            "pinCode": "249202"
-          }
-        ],
-        "id": 1
-      },
-      "paymentMethod": "cash",
-      "selectedAddress": {
-        "name": "Anuj",
-        "email": "anujdeshwal95@gmail.com",
-        "phone": "09997164140",
-        "street": "11th main ",
-        "city": "Rishikesh",
-        "state": "uttarakhand",
-        "pinCode": "249202"
-      },
-      
-      "id": 1
-    },
-    {
-      "items": [
+        },
         {
-          "title": "iPhone 9",
-          "description": "An apple mobile which is nothing like apple",
-          "price": 549,
-          "discountPercentage": 12.96,
-          "rating": 4.69,
-          "stock": 94,
-          "brand": "Apple",
+          "title": "Samsung Universe 9",
+          "description": "Samsung's new variant which goes beyond Galaxy to the Universe",
+          "price": 1249,
+          "discountPercentage": 15.46,
+          "rating": 4.09,
+          "stock": 36,
+          "brand": "Samsung",
           "category": "smartphones",
-          "thumbnail": "https://i.dummyjson.com/data/products/1/thumbnail.jpg",
+          "thumbnail": "https://i.dummyjson.com/data/products/3/thumbnail.jpg",
           "images": [
-            "https://i.dummyjson.com/data/products/1/1.jpg",
-            "https://i.dummyjson.com/data/products/1/2.jpg",
-            "https://i.dummyjson.com/data/products/1/3.jpg",
-            "https://i.dummyjson.com/data/products/1/4.jpg",
-            "https://i.dummyjson.com/data/products/1/thumbnail.jpg"
+            "https://i.dummyjson.com/data/products/3/1.jpg"
           ],
           "quantity": 1,
           "user": 1,
-          "id": 1
+          "id": 2
+        },
+        {
+          "title": "OPPOF19",
+          "description": "OPPO F19 is officially announced on April 2021.",
+          "price": 280,
+          "discountPercentage": 17.91,
+          "rating": 4.3,
+          "stock": 123,
+          "brand": "OPPO",
+          "category": "smartphones",
+          "thumbnail": "https://i.dummyjson.com/data/products/4/thumbnail.jpg",
+          "images": [
+            "https://i.dummyjson.com/data/products/4/1.jpg",
+            "https://i.dummyjson.com/data/products/4/2.jpg",
+            "https://i.dummyjson.com/data/products/4/3.jpg",
+            "https://i.dummyjson.com/data/products/4/4.jpg",
+            "https://i.dummyjson.com/data/products/4/thumbnail.jpg"
+          ],
+          "quantity": 1,
+          "user": 1,
+          "id": 3
         }
       ],
-      "totalAmount": 549,
-      "totalItems": 1,
+      "totalAmount": 2428,
+      "totalItems": 3,
       "user": {
         "email": "anujdeshwal95@gmail.com",
         "password": "@Deshwal95",
@@ -2193,17 +2142,18 @@
         ],
         "id": 1
       },
-      "paymentMethod": "cash",
+      "paymentMethod": "card",
       "selectedAddress": {
-        "name": "john wick ",
-        "email": "johnwick95@gmail.com",
-        "phone": "08887164140",
-        "street": "12th main",
-        "city": "Bangalore",
+        "name": "Anuj",
+        "email": "anujdeshwal95@gmail.com",
+        "phone": "09997164140",
+        "street": "11th main ",
+        "city": "Rishikesh",
         "state": "uttarakhand",
-        "pinCode": "323233"
+        "pinCode": "249202"
       },
-      "id": 2
+      "status": "pending",
+      "id": 1
     }
   ]
 }

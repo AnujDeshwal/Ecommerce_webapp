@@ -6,11 +6,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 
 const Order = () => {
-    const items = useSelector(state=>state.cart.items);
-    const dispatch = useDispatch();
-    const handleRemove =(e,itemid)=>{ 
-        dispatch(deleteItemFromCartAsync(itemid))
-    }
+    // const items = useSelector(state=>state.cart.items);
+    // const dispatch = useDispatch();
+    // const handleRemove =(e,itemid)=>{ 
+    //     dispatch(deleteItemFromCartAsync(itemid))
+    // }
     return (
         <>
        

@@ -46,3 +46,16 @@ export  function deleteItemFromCart(itemid) {
     resolve({data:{id:itemid}});
 });
 }
+  // thunk function always expext a promise that why we do make new promise 
+  export function resetCart(userId) {
+    // get all items of user's cart - and then delete each
+    return new Promise(async (resolve) => {
+      const response = await fetchItemsInCartByUserId(userId);
+      const items = response.data;
+      // yaad rakho here we used for of loop not for in loop 
+      for (let item of items) {
+        await deleteItemFromCart(item.id);
+      }
+      resolve({status:'success'})
+    });
+  }
