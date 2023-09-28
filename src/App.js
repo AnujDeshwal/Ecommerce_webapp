@@ -15,6 +15,8 @@ import { fetchItemsInCartByUserIdAsync } from './features/cart/cartSlice';
 import Page404 from './pages/404';
 import OrderSuccessPage from './pages/OrderSuccessPage';
 import UserOrdersPage from './pages/UserOrdersPage';
+import UserProfilePage from './pages/userProfilePage';
+import { fetchLoggedInUserAsync } from './features/user/userSlice';
 
 const router = createBrowserRouter([
   {
@@ -50,6 +52,10 @@ const router = createBrowserRouter([
     element: <Protected><UserOrdersPage></UserOrdersPage></Protected>,
   },
   {
+    path: "/profile",
+    element:<UserProfilePage></UserProfilePage>,
+  },
+  {
     // it means astrick aapka saare path se match kar jaat hai sabse neeche hai so that by koi listed path mila toh redirect ho jayega varna * toh hai hi 
     path: "*",
     element: <Page404></Page404> ,
@@ -63,6 +69,8 @@ function App() {
     // without user you cannot display its cart items 
     if(user){
       dispatch(fetchItemsInCartByUserIdAsync(user.id));
+      // ek toh auth ka user hai that is just for id right now varna detail info hum userinfo mai rakhenge of in userSlice 
+      dispatch(fetchLoggedInUserAsync(user.id));
       // we are fetching the data and showing the no. of items above the shopping cart icon and also will display that items in the cart section 
     }
     // simple si baat hai useEffect is not gonna work until you give something whose state is changing so as soon as state got change it is activated so i put user ,only putting dispatch is not gonna work we put dispatch just for overcoming the warning otherwise no use 

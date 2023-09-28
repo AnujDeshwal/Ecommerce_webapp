@@ -11,7 +11,7 @@ import { createOrderAsync } from '../features/order/orderSlice';
 const CheckOut = () => {
     const [selectedAddress,setSelectedAddress] = useState(null);
     const [paymentMethod,setPaymentMethod] = useState('cash');
-    const user = useSelector(state=>state.auth.loggedInUser);
+    const user = useSelector(state=>state.user.userInfo);
     const [open, setOpen] = useState(true)
     const items = useSelector(state=>state.cart.items);
     const currentOrder = useSelector(state=>state.order.currentOrder);
@@ -179,8 +179,8 @@ const CheckOut = () => {
                                     </div>
                                 </div>
                                 <div className="mt-6 flex items-center justify-end gap-x-6">
-                                    <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
-                                        Cancel
+                                    <button onclick={e=>reset()}  type="button" className="text-sm font-semibold leading-6 text-gray-900">
+                                        Reset
                                     </button>
                                     <button
                                         type="submit"

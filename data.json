@@ -2018,19 +2018,19 @@
           "name": "Anuj",
           "email": "anujdeshwal95@gmail.com",
           "phone": "09997164140",
-          "street": "11th main ",
+          "street": "lane no.1 , bapugram , rishikesh",
           "city": "Rishikesh",
           "state": "uttarakhand",
           "pinCode": "249202"
         },
         {
-          "name": "john wick ",
-          "email": "johnwick95@gmail.com",
-          "phone": "08887164140",
-          "street": "12th main",
-          "city": "Bangalore",
+          "name": "jack ",
+          "email": "jack@gmail.com",
+          "phone": "44444444444",
+          "street": "main",
+          "city": "pune",
           "state": "uttarakhand",
-          "pinCode": "323233"
+          "pinCode": "3234434"
         }
       ],
       "id": 1
@@ -2154,6 +2154,195 @@
       },
       "status": "pending",
       "id": 1
+    },
+    {
+      "items": [
+        {
+          "title": "HP Pavilion 15-DK1056WM",
+          "description": "HP Pavilion 15-DK1056WM Gaming Laptop 10th Gen Core i5, 8GB, 256GB SSD, GTX 1650 4GB, Windows 10",
+          "price": 1099,
+          "discountPercentage": 6.18,
+          "rating": 4.43,
+          "stock": 89,
+          "brand": "HP Pavilion",
+          "category": "laptops",
+          "thumbnail": "https://i.dummyjson.com/data/products/10/thumbnail.jpeg",
+          "images": [
+            "https://i.dummyjson.com/data/products/10/1.jpg",
+            "https://i.dummyjson.com/data/products/10/2.jpg",
+            "https://i.dummyjson.com/data/products/10/3.jpg",
+            "https://i.dummyjson.com/data/products/10/thumbnail.jpeg"
+          ],
+          "quantity": 1,
+          "user": 1,
+          "id": 1
+        }
+      ],
+      "totalAmount": 1099,
+      "totalItems": 1,
+      "user": {
+        "email": "anujdeshwal95@gmail.com",
+        "password": "@Deshwal95",
+        "addresses": [
+          {
+            "name": "Anuj",
+            "email": "anujdeshwal95@gmail.com",
+            "phone": "09997164140",
+            "street": "11th main ",
+            "city": "Rishikesh",
+            "state": "uttarakhand",
+            "pinCode": "249202"
+          },
+          {
+            "name": "john wick ",
+            "email": "johnwick95@gmail.com",
+            "phone": "08887164140",
+            "street": "12th main",
+            "city": "Bangalore",
+            "state": "uttarakhand",
+            "pinCode": "323233"
+          }
+        ],
+        "id": 1
+      },
+      "paymentMethod": "card",
+      "selectedAddress": {
+        "name": "Anuj",
+        "email": "anujdeshwal95@gmail.com",
+        "phone": "09997164140",
+        "street": "11th main ",
+        "city": "Rishikesh",
+        "state": "uttarakhand",
+        "pinCode": "249202"
+      },
+      "status": "pending",
+      "id": 2
+    },
+    {
+      "items": [
+        {
+          "title": "iPhone X",
+          "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+          "price": 899,
+          "discountPercentage": 17.94,
+          "rating": 4.44,
+          "stock": 34,
+          "brand": "Apple",
+          "category": "smartphones",
+          "thumbnail": "https://i.dummyjson.com/data/products/2/thumbnail.jpg",
+          "images": [
+            "https://i.dummyjson.com/data/products/2/1.jpg",
+            "https://i.dummyjson.com/data/products/2/2.jpg",
+            "https://i.dummyjson.com/data/products/2/3.jpg",
+            "https://i.dummyjson.com/data/products/2/thumbnail.jpg"
+          ],
+          "quantity": 1,
+          "user": 1,
+          "id": 1
+        }
+      ],
+      "totalAmount": 899,
+      "totalItems": 1,
+      "user": {
+        "email": "anujdeshwal95@gmail.com",
+        "password": "@Deshwal95",
+        "addresses": [
+          {
+            "name": "Anuj",
+            "email": "anujdeshwal95@gmail.com",
+            "phone": "09997164140",
+            "street": "lane no.1 , bapugram , rishikesh",
+            "city": "Rishikesh",
+            "state": "uttarakhand",
+            "pinCode": "249202"
+          },
+          {
+            "name": "jack ",
+            "email": "jack@gmail.com",
+            "phone": "44444444444",
+            "street": "main",
+            "city": "pune",
+            "state": "uttarakhand",
+            "pinCode": "3234434"
+          }
+        ],
+        "id": 1
+      },
+      "paymentMethod": "cash",
+      "selectedAddress": {
+        "name": "jack ",
+        "email": "jack@gmail.com",
+        "phone": "44444444444",
+        "street": "main",
+        "city": "pune",
+        "state": "uttarakhand",
+        "pinCode": "3234434"
+      },
+      "status": "pending",
+      "id": 3
+    },
+    {
+      "items": [
+        {
+          "title": "iPhone X",
+          "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+          "price": 899,
+          "discountPercentage": 17.94,
+          "rating": 4.44,
+          "stock": 34,
+          "brand": "Apple",
+          "category": "smartphones",
+          "thumbnail": "https://i.dummyjson.com/data/products/2/thumbnail.jpg",
+          "images": [
+            "https://i.dummyjson.com/data/products/2/1.jpg",
+            "https://i.dummyjson.com/data/products/2/2.jpg",
+            "https://i.dummyjson.com/data/products/2/3.jpg",
+            "https://i.dummyjson.com/data/products/2/thumbnail.jpg"
+          ],
+          "quantity": 1,
+          "user": 1,
+          "id": 1
+        }
+      ],
+      "totalAmount": 899,
+      "totalItems": 1,
+      "user": {
+        "email": "anujdeshwal95@gmail.com",
+        "password": "@Deshwal95",
+        "addresses": [
+          {
+            "name": "Anuj",
+            "email": "anujdeshwal95@gmail.com",
+            "phone": "09997164140",
+            "street": "lane no.1 , bapugram , rishikesh",
+            "city": "Rishikesh",
+            "state": "uttarakhand",
+            "pinCode": "249202"
+          },
+          {
+            "name": "jack ",
+            "email": "jack@gmail.com",
+            "phone": "44444444444",
+            "street": "main",
+            "city": "pune",
+            "state": "uttarakhand",
+            "pinCode": "3234434"
+          }
+        ],
+        "id": 1
+      },
+      "paymentMethod": "cash",
+      "selectedAddress": {
+        "name": "jack ",
+        "email": "jack@gmail.com",
+        "phone": "44444444444",
+        "street": "main",
+        "city": "pune",
+        "state": "uttarakhand",
+        "pinCode": "3234434"
+      },
+      "status": "pending",
+      "id": 4
     }
   ]
 }

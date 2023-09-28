@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchLoggedInUserOrders } from './userApi';
+import { fetchLoggedInUser, fetchLoggedInUserOrders, updateUser } from './userApi';
 const initialState = {
  userOrders:[],
   status: 'idle',
+  userInfo:null // this info will be used in case of detailed user info ,while auth will only be used for loggedInUser id etc checks
 };
 
 export const fetchLoggedInUserOrdersAsync = createAsyncThunk(
@@ -14,7 +15,23 @@ export const fetchLoggedInUserOrdersAsync = createAsyncThunk(
     return response.data;
   }
 );
-
+export const fetchLoggedInUserAsync = createAsyncThunk(
+  'user/fetchLoggedInUser',
+  async (id) => {
+    const response = await fetchLoggedInUser(id);
+    // The value we return becomes the `fulfilled` action payload
+    
+    return response.data;
+  }
+);
+export const updateUserAsync = createAsyncThunk(
+  'user/updateUser',
+  async (update) => {
+    const response = await updateUser(update);
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  }
+);
   
   export const userSlice = createSlice({
   name: 'user',
@@ -33,6 +50,21 @@ export const fetchLoggedInUserOrdersAsync = createAsyncThunk(
         state.status = 'idle';
         // this info can be different or more from loggedin User info jo loggedInUser auth mai tha 
         state.userOrders = action.payload;
+      })
+      .addCase(updateUserAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(updateUserAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        // now loggedInUser ka data bhi update ho jayega api mai update toh kar hi diya vahi se toh action.payload mai data aaya hai 
+        state.userInfo=action.payload;
+      })
+      .addCase(fetchLoggedInUserAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchLoggedInUserAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.userInfo=action.payload;
       })
   },
 });
