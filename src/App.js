@@ -12,6 +12,7 @@ import ProductDetailPage from './pages/productDetailPage';
 import Protected from './features/auth/components/Protected';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchItemsInCartByUserIdAsync } from './features/cart/cartSlice';
+import Page404 from './pages/404';
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,11 @@ const router = createBrowserRouter([
     path: "/product-details/:id",
     element:<Protected><ProductDetailPage/></Protected> ,
   },
+  {
+    // it means astrick aapka saare path se match kar jaat hai sabse neeche hai so that by koi listed path mila toh redirect ho jayega varna * toh hai hi 
+    path: "*",
+    element: <Page404></Page404> ,
+  },
 ]);
 function App() {
   const user = useSelector(state=>state.auth.loggedInUser);
@@ -46,7 +52,6 @@ function App() {
   useEffect(()=>{
     // without user you cannot display its cart items 
     if(user){
-      console.log("hello")
       dispatch(fetchItemsInCartByUserIdAsync(user.id));
       // we are fetching the data and showing the no. of items above the shopping cart icon and also will display that items in the cart section 
     }

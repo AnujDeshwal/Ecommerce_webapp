@@ -1,8 +1,6 @@
 import React from 'react';
-import { Fragment, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { NavLink } from 'react-router-dom';
+import {useState } from 'react'
+import { NavLink, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteItemFromCartAsync, updateItemAsync } from './cartSlice';
 
@@ -23,6 +21,8 @@ const Cart = () => {
     }
     return (
         <>
+        {/* agar there is no elements in the carts it means cart is empty so no need to show cart it will redirect you to the hompage  */}
+        {items.length === 0 && <Navigate to ='/' replace={true}></Navigate>}
             <div className="mx-auto mt-5 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">Cart</h1>
                 <div className="mt-8">

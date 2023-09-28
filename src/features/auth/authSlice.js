@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import createUser from './authApi';
+import createUser, { updateUser } from './authApi';
 import { checkUser } from './authApi';
 
 const initialState = {
@@ -21,6 +21,14 @@ export const checkUserAsync = createAsyncThunk(
   'user/checkUser',
   async (logInInfo) => {
     const response = await checkUser(logInInfo);
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  }
+);
+export const updateUserAsync = createAsyncThunk(
+  'user/updateUser',
+  async (update) => {
+    const response = await updateUser(update);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
@@ -55,6 +63,14 @@ export const authSlice = createSlice({
       .addCase(checkUserAsync.rejected, (state , action) => {
         state.status = 'idle';
         state.error = action.error;
+      })
+      .addCase(updateUserAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(updateUserAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        // now loggedInUser ka data bhi update ho jayega api mai update toh kar hi diya vahi se toh action.payload mai data aaya hai 
+        state.loggedInUser=action.payload;
       })
   },
 });

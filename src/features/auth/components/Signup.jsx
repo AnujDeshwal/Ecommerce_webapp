@@ -35,8 +35,9 @@ const Signup = () => {
           {/* all data fetched from react-hook-form is in the call back functio of handleSumbit see below  */}
           <form noValidate className="space-y-6" onSubmit={handleSubmit((data) => {
             // basically here confirm password is also stroed in this data but we do not want it thats why we did below thing without sending directly the data 
-            console.log(data)
-            dispatch(createUserAsync({email:data.email , password:data.password}))
+            console.log(data)  
+            // while doing checkout we will add adresses in it 
+            dispatch(createUserAsync({email:data.email , password:data.password , addresses:[]}))
           })}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">

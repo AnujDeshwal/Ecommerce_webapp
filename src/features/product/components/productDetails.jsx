@@ -53,7 +53,10 @@ const ProductDetails = () => {
     // now why using preventDefault basically here in the detail page on clicking add to cart button it is submitting the form konsa color,size and quantity or all that so submit karne mai browser khud se http request mart hai whenever browser sends http request page get refreshed because kya pata browser ne http request maar toh di but what if something is coming on response because request hai toh response bhi hoga so to take that response browser get reload the webpage toh ham is default behaviour ko rok rahe hai because brwoser http request maarega and then of course post hogi form sumbit ke case mai toh  if hamne api bana rakhi hai toh khud hi req.body mai aa jata that that was done by browser but here we do not want it becasue on sumbission mai ham khud fetch se http request maarke khud kar rahe hai response bhi khud hi laayenge so refresh ki jaroorat nahi 
     // ---------------------MAIN PROBLEM -------------
     // hai vese bhi ya main problem thi that add to cart button mai submit karne mai refresh hora and detail page is protected Protected.js mai jaake dekho so abhi cooki vagarey hai nahi toh user ki info gayab hori vo login page mai firse redirect kar de raha hai 
-      dispatch(addToCartAsync({...product ,quantity:1, user:user.id}))
+    // ==========Dekho here is like ki ham product ko spread karke bhej rahe hai so uski id bhi jayegi now uski id jayegi server mai so json -server  khud se nahi banayega ( that is a feature of json server) because id is already there now if do alag alag user ne same product apne cart mai daala toh id then product ki toh same hi hogi toh server mai duplicate id ho jayegi toh error aa jayega so hum object mai se id waali field delete karke bhej rahe hai 
+    const newItem = {...product ,quantity:1, user:user.id};
+    delete newItem['id'];
+      dispatch(addToCartAsync(newItem));
   }
 return(
          <>
