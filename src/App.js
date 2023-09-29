@@ -17,6 +17,8 @@ import OrderSuccessPage from './pages/OrderSuccessPage';
 import UserOrdersPage from './pages/UserOrdersPage';
 import UserProfilePage from './pages/userProfilePage';
 import { fetchLoggedInUserAsync } from './features/user/userSlice';
+import LogOut from './features/auth/components/Logout';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 
 const router = createBrowserRouter([
   {
@@ -58,6 +60,10 @@ const router = createBrowserRouter([
   {
     path: "/logout",
     element:<LogOut></LogOut>,
+  },
+  {
+    path: "/forgot-password",
+    element:<ForgotPasswordPage></ForgotPasswordPage>,
   },
   {
     // it means astrick aapka saare path se match kar jaat hai sabse neeche hai so that by koi listed path mila toh redirect ho jayega varna * toh hai hi 
