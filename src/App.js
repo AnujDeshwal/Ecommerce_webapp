@@ -56,6 +56,10 @@ const router = createBrowserRouter([
     element:<UserProfilePage></UserProfilePage>,
   },
   {
+    path: "/logout",
+    element:<LogOut></LogOut>,
+  },
+  {
     // it means astrick aapka saare path se match kar jaat hai sabse neeche hai so that by koi listed path mila toh redirect ho jayega varna * toh hai hi 
     path: "*",
     element: <Page404></Page404> ,
