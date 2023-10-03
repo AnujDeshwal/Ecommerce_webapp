@@ -37,7 +37,7 @@ const Signup = () => {
             // basically here confirm password is also stroed in this data but we do not want it thats why we did below thing without sending directly the data 
             console.log(data)  
             // while doing checkout we will add adresses in it 
-            dispatch(createUserAsync({email:data.email , password:data.password , addresses:[]}))
+            dispatch(createUserAsync({email:data.email , password:data.password , addresses:[],role:'user'}))
           })}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
