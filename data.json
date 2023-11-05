@@ -22,18 +22,29 @@
       "id": 2,
       "title": "iPhone X",
       "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+<<<<<<< HEAD
       "price": 850,
       "discountPercentage": 17.9456,
       "rating": 4.44,
       "stock": 120,
+=======
+      "price": "850",
+      "discountPercentage": "17.9456",
+      "rating": 4.44,
+      "stock": "120",
+>>>>>>> 2348d1a446abb67ff8980f54d866f62771b835e7
       "brand": "Apple",
       "category": "smartphones",
       "thumbnail": "https://i.dummyjson.com/data/products/2/thumbnail.jpg",
       "images": [
         "https://i.dummyjson.com/data/products/2/1.jpg",
         "https://i.dummyjson.com/data/products/2/2.jpg",
+<<<<<<< HEAD
         "https://i.dummyjson.com/data/products/2/3.jpg",
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvVqEUIQuc8FfEdRgmf6IKc4ZLorknFFGN0oEOJsADR29TTllUzOHoHtBd_wQdqHWCmEA&usqp=CAU"
+=======
+        "https://i.dummyjson.com/data/products/2/3.jpg"
+>>>>>>> 2348d1a446abb67ff8980f54d866f62771b835e7
       ]
     },
     {
@@ -2047,6 +2058,7 @@
       "email": "anujdeshwal95@gmail.com",
       "password": "@Deshwal95",
       "role": "admin",
+<<<<<<< HEAD
       "addresses": [
         {
           "name": "Anuj",
@@ -2058,6 +2070,9 @@
           "pinCode": "23353534"
         }
       ],
+=======
+      "addresses": [],
+>>>>>>> 2348d1a446abb67ff8980f54d866f62771b835e7
       "id": 1
     },
     {
@@ -2406,6 +2421,7 @@
       "selectedAddress": null,
       "status": "pending",
       "id": 5
+<<<<<<< HEAD
     },
     {
       "items": [
@@ -2555,6 +2571,8 @@
       },
       "status": "pending",
       "id": 7
+=======
+>>>>>>> 2348d1a446abb67ff8980f54d866f62771b835e7
     }
   ]
 }
