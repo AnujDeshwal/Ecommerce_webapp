@@ -53,6 +53,8 @@ const UserProfile = () => {
                     Name : {user.name ? user.name : 'New User'}</h1>
                 <h3 className="text-xl  font-bold tracking-tight text-red-900">
                     Email Address : {user.email}</h3>
+               {user.role==="admin" && <h3 className="text-xl  font-bold tracking-tight text-red-900">
+                    Role : {user.role}</h3>}
 
                 <div className="border-t lg:px-0 border-gray-200 mt-7 py-4 sm:px-6">
                     {!showAddressForm?<button onClick={e=>{setShowAddressForm(true);setSelectedEditIndex(-1)//if koi edit vaala khula hoga toh close hojayega 

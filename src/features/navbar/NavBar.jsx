@@ -2,18 +2,20 @@ import React from 'react';
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const user = {
     name: 'Tom Cook',
     email: 'tom@example.com',
     imageUrl:
-        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+        'https://is.zobj.net/image-server/v1/images?r=LmH7QXbE427uWEivPnIj5r6x2wTxSwavTVlEsiPjlQiGVrNcIdEJm3SikpnActIi9pRNHpLJv3wFfWC70EN5Q3QSKzVH5yGz_OVPWUkZgCSGuK4icL1w8rmzqmZ24xiwOE-tsAi5wvNuo0TZA-c-P7-MfcJw39MxSi0R0K_xgA8HBB2f0ew9MD-Q7AzSr8RbJWH9d1cqBZOOyTrdmNav9-hb5o1tV75_tdBiFxh7f3I95O9sfWhICBU0xfU',
 }
 const navigation = [
-    { name: 'Dashboard', href: '#', current: true },
-    { name: 'Team', href: '#', current: false },
+    // here user:true states that it is just for user and admin:true means it is just for admin 
+    { name: 'Dashboard', link: '#', user: true },
+    { name: 'Team', link: '#', user: true },
+    { name: 'Admin', link:"/admin" , admin:true},
 ]
 const userNavigation = [
     { name: 'Your Profile', link: '/profile' },
@@ -26,6 +28,7 @@ function classNames(...classes) {
 }
 const NavBar = ({ children }) => {
     const items = useSelector(state=>state.cart.items);
+    const user = useSelector(state=>state.auth.loggedInUser);
     return (
         <>
             <div className="min-h-full">
@@ -47,9 +50,9 @@ const NavBar = ({ children }) => {
                                         <div className="hidden md:block">
                                             <div className="ml-10 flex items-baseline space-x-4">
                                                 {navigation.map((item) => (
-                                                    <a
+                                                    item[user.role] ? <Link
                                                         key={item.name}
-                                                        href={item.href}
+                                                        to={item.link}
                                                         className={classNames(
                                                             item.current
                                                                 ? 'bg-gray-900 text-white'
@@ -59,7 +62,7 @@ const NavBar = ({ children }) => {
                                                         aria-current={item.current ? 'page' : undefined}
                                                     >
                                                         {item.name}
-                                                    </a>
+                                                    </Link>:null
                                                 ))}
                                             </div>
                                         </div>
@@ -135,11 +138,12 @@ const NavBar = ({ children }) => {
 
                             <Disclosure.Panel className="md:hidden">
                                 <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
+                                    
                                     {navigation.map((item) => (
+                                        item[user.role] ? <NavLink to={item.link}>
                                         <Disclosure.Button
                                             key={item.name}
                                             as="a"
-                                            href={item.href}
                                             className={classNames(
                                                 item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                                                 'block rounded-md px-3 py-2 text-base font-medium'
@@ -148,6 +152,7 @@ const NavBar = ({ children }) => {
                                         >
                                             {item.name}
                                         </Disclosure.Button>
+                                        </NavLink>:null
                                     ))}
                                 </div>
                                 <div className="border-t border-gray-700 pb-3 pt-4">
@@ -177,14 +182,13 @@ const NavBar = ({ children }) => {
                                     </div>
                                     <div className="mt-3 space-y-1 px-2">
                                         {userNavigation.map((item) => (
-                                            <Disclosure.Button
+                                           <NavLink to = {item.link}> <Disclosure.Button
                                                 key={item.name}
                                                 as="a"
-                                                href={item.href}
                                                 className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                                             >
                                                 {item.name}
-                                            </Disclosure.Button>
+                                            </Disclosure.Button> </NavLink>
                                         ))}
                                     </div>
                                 </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, Navigate } from 'react-router-dom';
 import { checkUserAsync } from '../authSlice';
@@ -7,7 +7,6 @@ const Login = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm()
   const dispatch = useDispatch();
