@@ -3,13 +3,12 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
 import {
   fetchAllProductsAsync, fetchAllProductsByFilterAsync, fetchBrandsAsync, fetchCategoriesAsync, fetchDetailsAsync,
 } from '../productSlice';
-import { ITEMS_PER_PAGE } from '../../../app/constants';
+import { ITEMS_PER_PAGE, discountedPrice } from '../../../app/constants';
 import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon, StarIcon } from '@heroicons/react/20/solid'
 import { NavLink } from 'react-router-dom';
-import fetchAllProducts, { fetchBrands, fetchCategories } from '../productListApi';
 
 const sortOptions = [
   // of course best rating means on the top highest rated products should lie 
@@ -446,7 +445,7 @@ const ProductGrid = ({products}) => {
                       <p className="mt-1 text-sm text-gray-500"><StarIcon className='w-6 h-6 inline'></StarIcon><span className="align-bottom">{product.rating}</span></p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">${Math.round(product.price * (1 - product.discountPercentage / 100))}</p>
+                      <p className="text-sm font-medium text-gray-900">${discountedPrice(product)}</p>
                       <p className="text-sm font-medium line-through text-gray-400">${product.price}</p>
                     </div>
                   </div>

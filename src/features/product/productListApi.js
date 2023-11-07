@@ -40,6 +40,7 @@ export  function fetchAllProductsByFilter(filter,sort,pagination) {
   return new Promise(async (resolve) =>{
     const response = await fetch(`http://localhost:8080/products?${queryString}`);
     const data = await response.json();
+      // we are using x-total count because due to some restriction the server could send only subset of the totla items so we are ordering to send the all totalitems in the server
     const totalItems = await response.headers.get('X-Total-Count');
     resolve({data:{products:data,totalItems:+totalItems}});
 });

@@ -1,11 +1,10 @@
 import { useSelector, useDispatch } from "react-redux";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import {
   fetchAllProductsByFilterAsync,
   fetchBrandsAsync,
   fetchCategoriesAsync,
 } from "../../product/productSlice";
-import { ITEMS_PER_PAGE } from "../../../app/constants";
+import { ITEMS_PER_PAGE, discountedPrice } from "../../../app/constants";
 import { Fragment, useEffect, useState } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -18,6 +17,7 @@ import {
   StarIcon,
 } from "@heroicons/react/20/solid";
 import { Link, NavLink } from "react-router-dom";
+import { Pagination } from "../../common/Pagination";
 const sortOptions = [
   // of course best rating means on the top highest rated products should lie
   { name: "Best Rating", sort: "rating", order: "desc", current: false },
@@ -395,91 +395,7 @@ const DesktopFilter = ({ handleFilter, filters }) => {
     </form>
   );
 };
-const Pagination = ({ page, setPage, handlePage, totalItems }) => {
-  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-  return (
-    <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
-      <div className="flex flex-1 justify-between sm:hidden">
-        {/* mobile pagination  */}
-        <div
-          onClick={(e) => handlePage(page > 1 ? page - 1 : page)}
-          className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-        >
-          Previous
-        </div>
-        <div
-          onClick={(e) => handlePage(page < totalPages ? page + 1 : page)}
-          className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-        >
-          Next
-        </div>
-      </div>
-      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm text-gray-700">
-            {/* here it should be shown like first page is showing 1 to 10 products if ITEMS_PER_PAGE is 10 then second page 11 to 20 so on .  */}
-            Showing{" "}
-            <span className="font-medium">
-              {(page - 1) * ITEMS_PER_PAGE + 1}
-            </span>{" "}
-            to{" "}
-            <span
-              // agar results hi 2 hue and ITEMS_PER_PAGE is 10 toh filter mai esa ho sakta hai
-              className="font-medium"
-            >
-              {page *
-                (ITEMS_PER_PAGE > totalItems ? totalItems : ITEMS_PER_PAGE)}
-            </span>{" "}
-            of <span className="font-medium">{totalItems}</span> results
-          </p>
-        </div>
-        <div>
-          <nav
-            className="isolate inline-flex -space-x-px rounded-md shadow-sm"
-            aria-label="Pagination"
-          >
-            <div
-              onClick={(e) => handlePage(page > 1 ? page - 1 : page)}
-              className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-            >
-              <span className="sr-only">Previous</span>
-              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-            </div>
-            {/* Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" */}
 
-            {/* it is like fakeArray={length:5} it means i am declaring a array with lenght 5 it is not object here lenght is a keyword  */}
-            {/* here below i want to iterable which should itereate upto totapage it totalItems is 100 and ITEMS_PER_PAGE is 10 means totalPage is 10 so below loop should iterate 10 times so in the pageination from 1 to 10 block will be created to paginate  */}
-            {Array.from({ length: totalPages }).map((el, index) => {
-              return (
-                <div>
-                  <div
-                    onClick={(e) => handlePage(index + 1)}
-                    aria-current="page"
-                    className={`relative z-10 cursor-pointer inline-flex items-center ${
-                      index + 1 === page
-                        ? "bg-indigo-600 text-white"
-                        : "text-gray-400"
-                    }  px-4 py-2 text-sm font-semibold focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
-                  >
-                    {index + 1}
-                  </div>
-                </div>
-              );
-            })}
-
-            <div
-              onClick={(e) => handlePage(page < totalPages ? page + 1 : page)}
-              className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-            >
-              <span className="sr-only">Next</span>
-              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-            </div>
-          </nav>
-        </div>
-      </div>
-    </div>
-  );
-};
 const ProductGrid = ({ products }) => {
   return (
     // you should know the meaning of col-span-3 means firstly a grid would be used here and like col-5 would be give to the whole page and out of those five column only three column would be taken by product list i dont know if total column 5 or 6 , parent div would have this configuration
@@ -526,10 +442,7 @@ const ProductGrid = ({ products }) => {
                       <div>
                         <p className="text-sm font-medium text-gray-900">
                           $
-                          {Math.round(
-                            product.price *
-                              (1 - product.discountPercentage / 100)
-                          )}
+                          {discountedPrice(product)}
                         </p>
                         <p className="text-sm font-medium line-through text-gray-400">
                           ${product.price}

@@ -21,3 +21,5 @@ here we did like first hamne detail page ko fetch karaya ki jese hi product mai 
 detail-page/${product.id} id bhi bheji now i sent id too because i will fetch id from useParams and then through that id i can call api   , our api suppor /id this functionality , in the route if you want to declare variable ki koi variable cheej aayegi so we do like this detail-page/:id now i am like jese hi click karega toh id params me jayegi mai useParams se fetch karunga and then jese hi params mai change aayega mera useEffect invoke ho jayega ku ki mai iski [] isme params.id daal dunga na then fetch kar lunga hum direct bhi kar sakte the that onClick mai hi id bhejdo dispatch mai useEffect ka use nahi hota 
 topic:error
 just got invalid hook call , const dispatch = useDispatch; karna ye that useDispatch()
+topic: get components from tailwind
+when you take a component from the taiwind so it generally in the format of html but in the react we need jsx format so remember to convert html to jsx 
