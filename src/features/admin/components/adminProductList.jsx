@@ -450,6 +450,7 @@ const ProductGrid = ({ products }) => {
                       </div>
                     </div>
                     {product.deleted?<p className="text-sm text-red-600"> Product deleted</p>:null}
+                    {product.stock<=0 && <p className="text-sm text-red-400">Out of Stock</p>}
                   </div>
                 </NavLink>
                 <div>

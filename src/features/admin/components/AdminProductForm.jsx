@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { clearSelectedProduct, createProductAsync, fetchDetailsAsync, updateProductAsync } from "../../product/productSlice";
 import { useParams } from "react-router-dom";
+import Modal from "../../common/Modal";
 export const AdminProductForm = () => {
   const brands = useSelector((state) => state.product.brands);
   const categories = useSelector((state) => state.product.categories);
   const selectedProduct = useSelector(state=>state.product.details)
+  const [openModal , setOpenModal] = useState(null);
   const {
     register,
     setValue,
@@ -45,13 +47,14 @@ export const AdminProductForm = () => {
   },[ params.id , setValue , selectedProduct])
   
   const handleDelete=()=>{
-    console.log("delted")
+    console.log("deleted")
     const product = {...selectedProduct};
     product.deleted=true;
     dispatch(updateProductAsync(product));
   }
   return (
     <>
+     <Modal title={`Delete ${selectedProduct.title}`} message="Are you sure you want to delete this cart item" dangerOption="delete" cancelOption="cancel" dangerAction={(e) => handleDelete()} showModal={openModal} setOpenModal={setOpenModal}></Modal>
       <form noValidate className="space-y-6" onSubmit={handleSubmit((data)=>{
         const product ={...data};
         product.images = [product.image1 , product.image2 , product.image3];
@@ -375,7 +378,7 @@ export const AdminProductForm = () => {
           >
             Cancel
           </button>
-          {params.id?   <button onClick={handleDelete}
+          {params.id?   <button onClick={e=>setOpenModal(true)}
             type="button"
             className="text-sm font-semibold leading-6 text-red-900"
           >

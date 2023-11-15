@@ -6,6 +6,7 @@ In the filter you need to make another thunk function another api call because a
 || what is json server ?
 json server is nothing but create a api for us you just need to provide a data.json file to it so that at that api call that data of data.json file would be fetched basically json server package seeks for a port no. by default it can run on 3000 port but manually port could be provided ,we use json server because it make a free api for us without the use of nodejs or backend otherwise you know how to make a api by get ,post request and also they give us functionality =>
 1.like in you json file there would be key pair like category:smartphone so you can filter then like you api is this http://localhost:8080/products?category=smartphone so this helps in filter also http://localhost:8080/products?brand=apple means now that object would be fetched who has brand:apple as a key so this helps and for the filter you need to create other thunk function and another api call .
+first install json server through npm then command to run json server : json-server --watch data.json --port 8080
 2.simple go to json server npm site and ther scroll below and there would be many functionality liike sort filter of json server 
 3.it also limit the product get fetched during api call just put this ?_limit=10 so only 10 products would be seen so this concept could be used in the pagination 
 topic:Pagination functionality
@@ -23,3 +24,10 @@ topic:error
 just got invalid hook call , const dispatch = useDispatch; karna ye that useDispatch()
 topic: get components from tailwind
 when you take a component from the taiwind so it generally in the format of html but in the react we need jsx format so remember to convert html to jsx 
+Topic: Importance of making page of each component
+Making a different component as page and then add component in it is beneficial because in a page you can add many components  
+Topic: what is use of status variable in the react redux;
+basically you might be wondering whenevere we are fetching the things from the api so after it we make a thunk for it then two there is two action like pending and fulfilled which we make so these are like when we fetch something from api or backedn you can say means it is in loading state so a spinner or loader  should  appear so  here we use react loader spinner package and install it .whene you are fetching the product from the local system so there would be no delay so loader may not be appeared but in the case of fetching from a real backend or remote backend so delay would be there so then loader is beneficial 
+Topic:Modal
+we also used modal for to confirm that if you want to remove something then you are sure or not 
+one important thing during implementation of it is that when you will click on remove then modal will appear but the thing is there is a state showModal i was thinking like when i will click on remove so i will set true to showModal and will send it as a prop in the Modal so that modal will open but this approach is very wrong because whole cart is running under a loop and if you simply make true to showModal so you know for all elements in the loop it will become true so the modal which will appear will be of the last cart element not of that element which you clicked on then as soon as you will call dangerAction function so it will remove the last cart element only because evey time it would have last element id only so in the showModal it will only be true for particular id go and watch my code in the cartjs in the remove section 

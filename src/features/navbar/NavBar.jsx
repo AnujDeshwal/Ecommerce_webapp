@@ -13,9 +13,8 @@ const user = {
 }
 const navigation = [
     // here user:true states that it is just for user and admin:true means it is just for admin 
-    { name: 'Dashboard', link: '#', user: true },
-    { name: 'Team', link: '#', user: true },
-    { name: 'Admin', link:"/admin" , admin:true},
+    { name: 'Products', link: '/', user: true },
+    { name: 'Products', link:"/admin" , admin:true},
     { name: 'Orders', link:"/admin/orders" , admin:true},
 ]
 const userNavigation = [
@@ -43,7 +42,8 @@ const NavBar = ({ children }) => {
                                             <NavLink to='/'>
                                             <img
                                                 className="h-8 w-8"
-                                                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                                                src="/ecommerce.png"
+                                                
                                                 alt="Your Company"
                                             />
                                             </NavLink>

@@ -1,121 +1,138 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
+import { useSelector, useDispatch } from "react-redux";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import {
-  fetchAllProductsAsync, fetchAllProductsByFilterAsync, fetchBrandsAsync, fetchCategoriesAsync, fetchDetailsAsync,
-} from '../productSlice';
-import { ITEMS_PER_PAGE, discountedPrice } from '../../../app/constants';
-import { Fragment, useEffect, useState } from 'react'
-import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon, StarIcon } from '@heroicons/react/20/solid'
-import { NavLink } from 'react-router-dom';
+  fetchAllProductsAsync,
+  fetchAllProductsByFilterAsync,
+  fetchBrandsAsync,
+  fetchCategoriesAsync,
+  fetchDetailsAsync,
+} from "../productSlice";
+import { ITEMS_PER_PAGE, discountedPrice } from "../../../app/constants";
+import { Fragment, useEffect, useState } from "react";
+import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { Grid } from  'react-loader-spinner'
+import {
+  ChevronDownIcon,
+  FunnelIcon,
+  MinusIcon,
+  PlusIcon,
+  Squares2X2Icon,
+  StarIcon,
+} from "@heroicons/react/20/solid";
+import { NavLink } from "react-router-dom";
 
 const sortOptions = [
-  // of course best rating means on the top highest rated products should lie 
-  { name: 'Best Rating', sort: 'rating', order: 'desc', current: false },
-  // rememeber here in the sort field we are putting the name of key we have in our data like price we have in our date fetching from the api 
-  { name: 'Price: Low to High', sort: 'price', order: 'asc', current: false },
-  { name: 'Price: High to Low', sort: 'price', order: 'desc', current: false },
-]
-
-
+  // of course best rating means on the top highest rated products should lie
+  { name: "Best Rating", sort: "rating", order: "desc", current: false },
+  // rememeber here in the sort field we are putting the name of key we have in our data like price we have in our date fetching from the api
+  { name: "Price: Low to High", sort: "price", order: "asc", current: false },
+  { name: "Price: High to Low", sort: "price", order: "desc", current: false },
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function ProductList() {
-  const products = useSelector(state => state.product.products);
-  const totalItems = useSelector(state => state.product.totalItems);
-  const brands = useSelector(state => state.product.brands);
-  const categories = useSelector(state => state.product.categories);
-// initially filters was global now i am taking it from useSelector so now only this compnent has access of these fiilters but i have others components too to work with filter there i will send it as props 
+  const products = useSelector((state) => state.product.products);
+  const totalItems = useSelector((state) => state.product.totalItems);
+  const brands = useSelector((state) => state.product.brands);
+  const categories = useSelector((state) => state.product.categories);
+  // initially filters was global now i am taking it from useSelector so now only this compnent has access of these fiilters but i have others components too to work with filter there i will send it as props
   const filters = [
     {
-      id: 'brand',
-      name: 'Brands',
-      options:brands,
+      id: "brand",
+      name: "Brands",
+      options: brands,
     },
     {
-      id: 'category',
-      name: 'Category',
-      options:categories,
+      id: "category",
+      name: "Category",
+      options: categories,
     },
-  ]
+  ];
 
-  
   const dispatch = useDispatch();
   const [filter, setFilter] = useState({});
   const [sort, setSort] = useState({});
-  // By default Page:1 or first page would be shown from pagination 
-  const [page , setPage]= useState(1);
+  // By default Page:1 or first page would be shown from pagination
+  const [page, setPage] = useState(1);
   // very importanat that you know action tells what to do then and reducer tells how to do but for combining both we always use dispatch means completing the action , whenever we modify the state always we will use dispatch ,now you know here we do not have button that as soon as we visit the website and press the button then we will get all product no as soon as we visite website we want it so of course here useEffect come to play a important role
   const handleFilter = (e, section, option) => {
-    // here section is like which is main element during iterating the filters  so from the id we get the which type of filter is it like brand , category 
-    // const newFilter = ({...filter , [section.id]:option.value}) this is also a way of doing ,you must know when we we variable as a key so square braket is needed 
-    // here we are using filter state as useState hook because like you selected brand:apple and then you select category:smartphone means you need apple smartphone so both filters should be applied so ...filter means previouse value of filter should be executed and in the productListApi while creating queryString we are adding & in the last it will do like ?category:smartphone&brand:apple so this applies both filters at once 
-    const newFilter ={...filter};
-    if(e.target.checked){
-      // if newfilter[section.id] has something so that will work otherwise undefined 
-      if(newFilter[section.id]){
+    // here section is like which is main element during iterating the filters  so from the id we get the which type of filter is it like brand , category
+    // const newFilter = ({...filter , [section.id]:option.value}) this is also a way of doing ,you must know when we we variable as a key so square braket is needed
+    // here we are using filter state as useState hook because like you selected brand:apple and then you select category:smartphone means you need apple smartphone so both filters should be applied so ...filter means previouse value of filter should be executed and in the productListApi while creating queryString we are adding & in the last it will do like ?category:smartphone&brand:apple so this applies both filters at once
+    const newFilter = { ...filter };
+    if (e.target.checked) {
+      // if newfilter[section.id] has something so that will work otherwise undefined
+      if (newFilter[section.id]) {
         newFilter[section.id].push(option.value);
+      } else {
+        // at the starting point  we are creating a array with a value when newFilter[section.id] is empty
+        newFilter[section.id] = [option.value];
       }
-      else{
-        // at the starting point  we are creating a array with a value when newFilter[section.id] is empty 
-        newFilter[section.id]=[option.value];
-      }
+    } else {
+      // means removing the section.id field from the object so that filter would be reset to previous one
+      const index = newFilter[section.id].findIndex(
+        (elem) => elem == option.value
+      );
+      newFilter[section.id].splice(index, 1);
     }
-    else{
-      // means removing the section.id field from the object so that filter would be reset to previous one 
-      const index = newFilter[section.id].findIndex(elem=>elem==option.value);
-      newFilter[section.id].splice(index,1);
-    }
-    // newFilter se section.id delete karne ke baad setFilter bhi toh karoge na 
+    // newFilter se section.id delete karne ke baad setFilter bhi toh karoge na
     // console.log("newFilter is:"+newFilter);
-    setFilter(newFilter)
-    
-  }
-  
+    setFilter(newFilter);
+  };
+
   const handleSort = (e, option) => {
     // here in the json server it support sort querey like http://localhost:8080/products?_sort:price&_order:asc
-    // means sort the price in the ascending order that is why both should be given and always remember that map could have only unique keys means if again you select any other sorting so same _sort and _order field would be replaced and same in case of filters 
+    // means sort the price in the ascending order that is why both should be given and always remember that map could have only unique keys means if again you select any other sorting so same _sort and _order field would be replaced and same in case of filters
     const newSort = { _sort: option.sort, _order: option.order };
     setSort(newSort);
-  }
-  const handlePage=( page)=>{
-    setPage(page)
-  }
+  };
+  const handlePage = (page) => {
+    setPage(page);
+  };
   useEffect(() => {
-    const pagination  = {_page:page,_limit:ITEMS_PER_PAGE};
+    const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
     // In Redux Toolkit's createAsyncThunk function, you cannot directly pass multiple parameters to the thunk function without using an object as the sole argument.
-    dispatch(fetchAllProductsByFilterAsync({filter ,sort ,pagination }));
-    
-    // here as soon as dispatch and filter would have some changes useEffect will be called itself 
-  }, [ dispatch , filter , sort , page]);
-  // below useState is used to open and close some filters 
-  // this below useEffect is for ki koi filter lagaya toh then first page mai hi aa jaye kuki koi agar vo page9 mai hai and us page mai filter vaala elem hai hi nahi toh vo toh shuruwaat ke pages mai hi hoga api sirf usi element ko fetch karegi totalItems ka count bhi badal jayega apple ke jitne device honge utne hi totalIems honge as an example 
-  useEffect(()=>{
-    setPage(1);
-    // sorting mai isliye kiya because first page mai hi sabse upar rating vaale honge if user is in page9 and use i page mai sabse jyada rating vaale dikhe so this is not that convenient baad mai page9 mai khud jaa sakta hai vo 
-  } , [totalItems,sort]);
+    dispatch(fetchAllProductsByFilterAsync({ filter, sort, pagination }));
 
-  useEffect(()=>{
+    // here as soon as dispatch and filter would have some changes useEffect will be called itself
+  }, [dispatch, filter, sort, page]);
+  // below useState is used to open and close some filters
+  // this below useEffect is for ki koi filter lagaya toh then first page mai hi aa jaye kuki koi agar vo page9 mai hai and us page mai filter vaala elem hai hi nahi toh vo toh shuruwaat ke pages mai hi hoga api sirf usi element ko fetch karegi totalItems ka count bhi badal jayega apple ke jitne device honge utne hi totalIems honge as an example
+  useEffect(() => {
+    setPage(1);
+    // sorting mai isliye kiya because first page mai hi sabse upar rating vaale honge if user is in page9 and use i page mai sabse jyada rating vaale dikhe so this is not that convenient baad mai page9 mai khud jaa sakta hai vo
+  }, [totalItems, sort]);
+
+  useEffect(() => {
     dispatch(fetchBrandsAsync());
     dispatch(fetchCategoriesAsync());
-  },[])
+  }, []);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   return (
     <div>
       {/* ======================Category Filters which comes in left side and also sorting and inside it all products are displayed as well ========== */}
       {/* Here is a thing that almost everything is written twice for the desktop and mobile size  */}
+      
       <div className="bg-white">
+       
         <div>
-        {/* ================== here one thing should be rememebered that we are sending props because here mobileFiltersOpen and setMobileFiltersOpen are being used here as well in the MobileFilter also so you can not do like declaring them with the useState again in the Mobile filter no becaues there that would be another state or block restricted state so if you are passing it as props so same state would be used by both by this component and mobile filter component so similarly here a filter useStat is being used that state would have some filter info that till now which filters are used so that other filter will add on previouse filteres if we send handlefilter as props.  */}
-          <MobileFilter mobileFiltersOpen={mobileFiltersOpen} setMobileFiltersOpen={setMobileFiltersOpen} handleFilter={handleFilter} filters={filters} ></MobileFilter>
+          {/* ================== here one thing should be rememebered that we are sending props because here mobileFiltersOpen and setMobileFiltersOpen are being used here as well in the MobileFilter also so you can not do like declaring them with the useState again in the Mobile filter no becaues there that would be another state or block restricted state so if you are passing it as props so same state would be used by both by this component and mobile filter component so similarly here a filter useStat is being used that state would have some filter info that till now which filters are used so that other filter will add on previouse filteres if we send handlefilter as props.  */}
+          <MobileFilter
+            mobileFiltersOpen={mobileFiltersOpen}
+            setMobileFiltersOpen={setMobileFiltersOpen}
+            handleFilter={handleFilter}
+            filters={filters}
+          ></MobileFilter>
 
           <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900">All Products</h1>
+              <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+                All Products
+              </h1>
 
               <div className="flex items-center">
                 <Menu as="div" className="relative inline-block text-left">
@@ -144,11 +161,13 @@ export default function ProductList() {
                           <Menu.Item key={option.name}>
                             {({ active }) => (
                               <p
-                                onClick={e => handleSort(e, option)}
+                                onClick={(e) => handleSort(e, option)}
                                 className={classNames(
-                                  option.current ? 'font-medium text-gray-900' : 'text-gray-500',
-                                  active ? 'bg-gray-100' : '',
-                                  'block px-4 py-2 text-sm'
+                                  option.current
+                                    ? "font-medium text-gray-900"
+                                    : "text-gray-500",
+                                  active ? "bg-gray-100" : "",
+                                  "block px-4 py-2 text-sm"
                                 )}
                               >
                                 {option.name}
@@ -161,7 +180,10 @@ export default function ProductList() {
                   </Transition>
                 </Menu>
 
-                <button type="button" className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7">
+                <button
+                  type="button"
+                  className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
+                >
                   <span className="sr-only">View grid</span>
                   <Squares2X2Icon className="h-5 w-5" aria-hidden="true" />
                 </button>
@@ -177,11 +199,13 @@ export default function ProductList() {
             </div>
 
             <section aria-labelledby="products-heading" className="pb-24 pt-6">
-
               {/* //filters for larget screen  */}
               <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
                 {/* Filters */}
-                <DesktopFilter handleFilter={handleFilter} filters={filters}></DesktopFilter>
+                <DesktopFilter
+                  handleFilter={handleFilter}
+                  filters={filters}
+                ></DesktopFilter>
 
                 {/* Product grid or displaying the product*/}
                 <ProductGrid products={products}></ProductGrid>
@@ -190,18 +214,31 @@ export default function ProductList() {
           </main>
           {/* here all the filters and product list ends  */}
           {/* ================================= pagination================================================ */}
-          <Pagination page={page} setPage={setPage} handlePage={handlePage} totalItems={totalItems}></Pagination>
+          <Pagination
+            page={page}
+            setPage={setPage}
+            handlePage={handlePage}
+            totalItems={totalItems}
+          ></Pagination>
         </div>
       </div>
-
     </div>
   );
 }
-// you know rather than doing like const MobileFilter=(props)=>{ then use somewhere props.handleFilter} so directly do {handleFilter} means it is a field of props object 
-const MobileFilter = ({ mobileFiltersOpen, setMobileFiltersOpen, handleFilter , filters }) => {
+// you know rather than doing like const MobileFilter=(props)=>{ then use somewhere props.handleFilter} so directly do {handleFilter} means it is a field of props object
+const MobileFilter = ({
+  mobileFiltersOpen,
+  setMobileFiltersOpen,
+  handleFilter,
+  filters,
+}) => {
   return (
     <Transition.Root show={mobileFiltersOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-40 lg:hidden" onClose={setMobileFiltersOpen}>
+      <Dialog
+        as="div"
+        className="relative z-40 lg:hidden"
+        onClose={setMobileFiltersOpen}
+      >
         <Transition.Child
           as={Fragment}
           enter="transition-opacity ease-linear duration-300"
@@ -239,19 +276,30 @@ const MobileFilter = ({ mobileFiltersOpen, setMobileFiltersOpen, handleFilter , 
 
               {/* Filters */}
               <form className="mt-4 border-t border-gray-200">
-
                 {filters.map((section) => (
-                  <Disclosure as="div" key={section.id} className="border-t border-gray-200 px-4 py-6">
+                  <Disclosure
+                    as="div"
+                    key={section.id}
+                    className="border-t border-gray-200 px-4 py-6"
+                  >
                     {({ open }) => (
                       <>
                         <h3 className="-mx-2 -my-3 flow-root">
                           <Disclosure.Button className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500">
-                            <span className="font-medium text-gray-900">{section.name}</span>
+                            <span className="font-medium text-gray-900">
+                              {section.name}
+                            </span>
                             <span className="ml-6 flex items-center">
                               {open ? (
-                                <MinusIcon className="h-5 w-5" aria-hidden="true" />
+                                <MinusIcon
+                                  className="h-5 w-5"
+                                  aria-hidden="true"
+                                />
                               ) : (
-                                <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                                <PlusIcon
+                                  className="h-5 w-5"
+                                  aria-hidden="true"
+                                />
                               )}
                             </span>
                           </Disclosure.Button>
@@ -259,7 +307,10 @@ const MobileFilter = ({ mobileFiltersOpen, setMobileFiltersOpen, handleFilter , 
                         <Disclosure.Panel className="pt-6">
                           <div className="space-y-6">
                             {section.options.map((option, optionIdx) => (
-                              <div key={option.value} className="flex items-center">
+                              <div
+                                key={option.value}
+                                className="flex items-center"
+                              >
                                 <input
                                   id={`filter-mobile-${section.id}-${optionIdx}`}
                                   name={`${section.id}[]`}
@@ -267,7 +318,7 @@ const MobileFilter = ({ mobileFiltersOpen, setMobileFiltersOpen, handleFilter , 
                                   type="checkbox"
                                   defaultChecked={option.checked}
                                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                  onChange={e => {
+                                  onChange={(e) => {
                                     handleFilter(e, section, option);
                                   }}
                                 />
@@ -291,71 +342,79 @@ const MobileFilter = ({ mobileFiltersOpen, setMobileFiltersOpen, handleFilter , 
         </div>
       </Dialog>
     </Transition.Root>
-  )
-}
-const DesktopFilter = ({ handleFilter ,filters}) => {
-  return (<form className="hidden lg:block">
-
-    {filters.map((section) => (
-      <Disclosure as="div" key={section.id} className="border-b border-gray-200 py-6">
-        {({ open }) => (
-          <>
-            <h3 className="-my-3 flow-root">
-              <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
-                <span className="font-medium text-gray-900">{section.name}</span>
-                <span className="ml-6 flex items-center">
-                  {open ? (
-                    <MinusIcon className="h-5 w-5" aria-hidden="true" />
-                  ) : (
-                    <PlusIcon className="h-5 w-5" aria-hidden="true" />
-                  )}
-                </span>
-              </Disclosure.Button>
-            </h3>
-            <Disclosure.Panel className="pt-6">
-              <div className="space-y-4">
-                {section.options.map((option, optionIdx) => (
-                  <div key={option.value} className="flex items-center">
-                    <input
-                      id={`filter-${section.id}-${optionIdx}`}
-                      name={`${section.id}[]`}
-                      defaultValue={option.value}
-                      type="checkbox"
-                      defaultChecked={option.checked}
-                      onChange={e => { handleFilter(e, section, option) }}
-                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                    />
-                    <label
-                      htmlFor={`filter-${section.id}-${optionIdx}`}
-                      className="ml-3 text-sm text-gray-600"
-                    >
-                      {option.label}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </Disclosure.Panel>
-          </>
-        )}
-      </Disclosure>
-    ))}
-  </form>
-  )
-}
-const Pagination = ({page ,setPage ,handlePage ,totalItems}) => {
-  const totalPages = Math.ceil(totalItems/ITEMS_PER_PAGE);
+  );
+};
+const DesktopFilter = ({ handleFilter, filters }) => {
+  return (
+    <form className="hidden lg:block">
+      {filters.map((section) => (
+        <Disclosure
+          as="div"
+          key={section.id}
+          className="border-b border-gray-200 py-6"
+        >
+          {({ open }) => (
+            <>
+              <h3 className="-my-3 flow-root">
+                <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                  <span className="font-medium text-gray-900">
+                    {section.name}
+                  </span>
+                  <span className="ml-6 flex items-center">
+                    {open ? (
+                      <MinusIcon className="h-5 w-5" aria-hidden="true" />
+                    ) : (
+                      <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                    )}
+                  </span>
+                </Disclosure.Button>
+              </h3>
+              <Disclosure.Panel className="pt-6">
+                <div className="space-y-4">
+                  {section.options.map((option, optionIdx) => (
+                    <div key={option.value} className="flex items-center">
+                      <input
+                        id={`filter-${section.id}-${optionIdx}`}
+                        name={`${section.id}[]`}
+                        defaultValue={option.value}
+                        type="checkbox"
+                        defaultChecked={option.checked}
+                        onChange={(e) => {
+                          handleFilter(e, section, option);
+                        }}
+                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                      />
+                      <label
+                        htmlFor={`filter-${section.id}-${optionIdx}`}
+                        className="ml-3 text-sm text-gray-600"
+                      >
+                        {option.label}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </Disclosure.Panel>
+            </>
+          )}
+        </Disclosure>
+      ))}
+    </form>
+  );
+};
+const Pagination = ({ page, setPage, handlePage, totalItems }) => {
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
   return (
     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
       <div className="flex flex-1 justify-between sm:hidden">
         {/* mobile pagination  */}
         <div
-          onClick={e=>handlePage(page>1?page-1:page)}
+          onClick={(e) => handlePage(page > 1 ? page - 1 : page)}
           className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
         >
           Previous
         </div>
         <div
-          onClick={e=>handlePage(page<totalPages?page+1:page)}
+          onClick={(e) => handlePage(page < totalPages ? page + 1 : page)}
           className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
         >
           Next
@@ -365,42 +424,57 @@ const Pagination = ({page ,setPage ,handlePage ,totalItems}) => {
         <div>
           <p className="text-sm text-gray-700">
             {/* here it should be shown like first page is showing 1 to 10 products if ITEMS_PER_PAGE is 10 then second page 11 to 20 so on .  */}
-            Showing <span className="font-medium">{(page-1)*ITEMS_PER_PAGE+1}</span> to <span 
-            // agar results hi 2 hue and ITEMS_PER_PAGE is 10 toh filter mai esa ho sakta hai 
-            className="font-medium">{page*(ITEMS_PER_PAGE>totalItems?totalItems:ITEMS_PER_PAGE)}</span> of{' '}
-            <span className="font-medium">{totalItems}</span> results
+            Showing{" "}
+            <span className="font-medium">
+              {(page - 1) * ITEMS_PER_PAGE + 1}
+            </span>{" "}
+            to{" "}
+            <span
+              // agar results hi 2 hue and ITEMS_PER_PAGE is 10 toh filter mai esa ho sakta hai
+              className="font-medium"
+            >
+              {page *
+                (ITEMS_PER_PAGE > totalItems ? totalItems : ITEMS_PER_PAGE)}
+            </span>{" "}
+            of <span className="font-medium">{totalItems}</span> results
           </p>
         </div>
         <div>
-          <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+          <nav
+            className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+            aria-label="Pagination"
+          >
             <div
-              onClick={e=>handlePage(page>1?page-1:page)}
+              onClick={(e) => handlePage(page > 1 ? page - 1 : page)}
               className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
             >
               <span className="sr-only">Previous</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
             </div>
             {/* Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" */}
-            
 
             {/* it is like fakeArray={length:5} it means i am declaring a array with lenght 5 it is not object here lenght is a keyword  */}
-               {/* here below i want to iterable which should itereate upto totapage it totalItems is 100 and ITEMS_PER_PAGE is 10 means totalPage is 10 so below loop should iterate 10 times so in the pageination from 1 to 10 block will be created to paginate  */}
-            {Array.from({length:totalPages}).map((el,index)=>{
-              return(
+            {/* here below i want to iterable which should itereate upto totapage it totalItems is 100 and ITEMS_PER_PAGE is 10 means totalPage is 10 so below loop should iterate 10 times so in the pageination from 1 to 10 block will be created to paginate  */}
+            {Array.from({ length: totalPages }).map((el, index) => {
+              return (
                 <div>
-                    <div
-              onClick={e=>handlePage(index+1)}
-              aria-current="page"
-              className={`relative z-10 cursor-pointer inline-flex items-center ${index+1===page?'bg-indigo-600 text-white':'text-gray-400'}  px-4 py-2 text-sm font-semibold focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
-            >
-              {index+1}
-            </div>
+                  <div
+                    onClick={(e) => handlePage(index + 1)}
+                    aria-current="page"
+                    className={`relative z-10 cursor-pointer inline-flex items-center ${
+                      index + 1 === page
+                        ? "bg-indigo-600 text-white"
+                        : "text-gray-400"
+                    }  px-4 py-2 text-sm font-semibold focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
+                  >
+                    {index + 1}
+                  </div>
                 </div>
-              )
+              );
             })}
-           
+
             <div
-             onClick={e=>handlePage(page<totalPages?page+1:page)}
+              onClick={(e) => handlePage(page < totalPages ? page + 1 : page)}
               className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
             >
               <span className="sr-only">Next</span>
@@ -410,23 +484,33 @@ const Pagination = ({page ,setPage ,handlePage ,totalItems}) => {
         </div>
       </div>
     </div>
-  )
-}
-const ProductGrid = ({products}) => {
- 
+  );
+};
+const ProductGrid = ({ products }) => {
+  const  status = useSelector(state=>state.product.status);
   return (
-    // you should know the meaning of col-span-3 means firstly a grid would be used here and like col-5 would be give to the whole page and out of those five column only three column would be taken by product list i dont know if total column 5 or 6 , parent div would have this configuration 
+    // you should know the meaning of col-span-3 means firstly a grid would be used here and like col-5 would be give to the whole page and out of those five column only three column would be taken by product list i dont know if total column 5 or 6 , parent div would have this configuration
     <div className="lg:col-span-3">
       {/* =========================ALL Products Displaying ========================================= */}
       <div className="bg-white">
+      {status === 'loading'?<Grid
+          height="80"
+          width="80"
+          color="#4F46E5"
+          ariaLabel="grid-loading"
+          radius="12.5"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+        />:null}
         <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
-
-
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
             {products.map((product) => (
               <NavLink to={`/product-details/${product.id}`}>
-                <div key={product.id} className="cursor-pointer group relative border-solid border-2 p-3 border-gray-200">
-
+                <div
+                  key={product.id}
+                  className="cursor-pointer group relative border-solid border-2 p-3 border-gray-200"
+                >
                   <div className="min-h-60 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
                     <img
                       src={product.thumbnail}
@@ -438,17 +522,33 @@ const ProductGrid = ({products}) => {
                     <div>
                       <h3 className="text-sm text-gray-700">
                         <a href={product.href}>
-                          <span aria-hidden="true" className="absolute inset-0" />
+                          <span
+                            aria-hidden="true"
+                            className="absolute inset-0"
+                          />
                           {product.title}
                         </a>
                       </h3>
-                      <p className="mt-1 text-sm text-gray-500"><StarIcon className='w-6 h-6 inline'></StarIcon><span className="align-bottom">{product.rating}</span></p>
+                      <p className="mt-1 text-sm text-gray-500">
+                        <StarIcon className="w-6 h-6 inline"></StarIcon>
+                        <span className="align-bottom">{product.rating}</span>
+                      </p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">${discountedPrice(product)}</p>
-                      <p className="text-sm font-medium line-through text-gray-400">${product.price}</p>
+                      <p className="text-sm font-medium text-gray-900">
+                        ${discountedPrice(product)}
+                      </p>
+                      <p className="text-sm font-medium line-through text-gray-400">
+                        ${product.price}
+                      </p>
                     </div>
                   </div>
+                  {product.deleted && (
+                    <p className="text-sm text-red-400">Product deleted</p>
+                  )}
+                  {product.stock <= 0 && (
+                    <p className="text-sm text-red-400">Out of Stock</p>
+                  )}
                 </div>
               </NavLink>
             ))}
@@ -456,5 +556,5 @@ const ProductGrid = ({products}) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

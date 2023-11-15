@@ -25,7 +25,7 @@
       "price": 850,
       "discountPercentage": 17.9456,
       "rating": 4.44,
-      "stock": 120,
+      "stock": 0,
       "brand": "Apple",
       "category": "smartphones",
       "thumbnail": "https://i.dummyjson.com/data/products/2/thumbnail.jpg",
@@ -1852,7 +1852,8 @@
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-U9bMlb40atMMtlItSLBwjAr1kISby4Iutd-jn7-kWl3ihvJLDGUvjrbz9MunEnPxIMs&usqp=CAU"
       ],
       "rating": 0,
-      "id": 101
+      "id": 101,
+      "deleted": true
     },
     {
       "title": "fake iphone",
@@ -2078,7 +2079,49 @@
       "id": 3
     }
   ],
-  "cart": [],
+  "cart": [
+    {
+      "title": "iPhone X",
+      "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+      "price": 850,
+      "discountPercentage": 17.9456,
+      "rating": 4.44,
+      "stock": 0,
+      "brand": "Apple",
+      "category": "smartphones",
+      "thumbnail": "https://i.dummyjson.com/data/products/2/thumbnail.jpg",
+      "images": [
+        "https://i.dummyjson.com/data/products/2/1.jpg",
+        "https://i.dummyjson.com/data/products/2/2.jpg",
+        "https://i.dummyjson.com/data/products/2/3.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvVqEUIQuc8FfEdRgmf6IKc4ZLorknFFGN0oEOJsADR29TTllUzOHoHtBd_wQdqHWCmEA&usqp=CAU"
+      ],
+      "productId": 2,
+      "quantity": 1,
+      "user": 1,
+      "id": 1
+    },
+    {
+      "title": "Huawei P30",
+      "description": "Huawei’s re-badged P30 Pro New Edition was officially unveiled yesterday in Germany and now the device has made its way to the UK.",
+      "price": 499,
+      "discountPercentage": 10.58,
+      "rating": 4.09,
+      "stock": 32,
+      "brand": "Huawei",
+      "category": "smartphones",
+      "thumbnail": "https://i.dummyjson.com/data/products/5/thumbnail.jpg",
+      "images": [
+        "https://i.dummyjson.com/data/products/5/1.jpg",
+        "https://i.dummyjson.com/data/products/5/2.jpg",
+        "https://i.dummyjson.com/data/products/5/3.jpg"
+      ],
+      "productId": 5,
+      "quantity": 1,
+      "user": 1,
+      "id": 2
+    }
+  ],
   "orders": [
     {
       "items": [
@@ -2178,7 +2221,7 @@
         "state": "uttarakhand",
         "pinCode": "249202"
       },
-      "status": "delivered",
+      "status": "pending",
       "id": 1
     },
     {
