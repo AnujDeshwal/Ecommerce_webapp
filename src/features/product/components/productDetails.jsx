@@ -59,16 +59,14 @@ const ProductDetails = () => {
     // ---------------------MAIN PROBLEM -------------
     // hai vese bhi ya main problem thi that add to cart button mai submit karne mai refresh hora and detail page is protected Protected.js mai jaake dekho so abhi cooki vagarey hai nahi toh user ki info gayab hori vo login page mai firse redirect kar de raha hai
     // ==========Dekho here is like ki ham product ko spread karke bhej rahe hai so uski id bhi jayegi now uski id jayegi server mai so json -server  khud se nahi banayega ( that is a feature of json server) because id is already there now if do alag alag user ne same product apne cart mai daala toh id then product ki toh same hi hogi toh server mai duplicate id ho jayegi toh error aa jayega so hum object mai se id waali field delete karke bhej rahe hai
-    //this below if else is for if item already in the cart so no need to add it again if any user attempt to add it again  , if index mil jayega toh of course 0 ya usse jyada hi hoga
-    if (items.findIndex((item) => item.productId === product.id) < 0) {
+    //this below if else is for if item already in the cart so no need to add it again if any user attempt to add it again  , if index mil jayega toh of course 0 ya usse jyada hi hoga,now but in the backend we have a product object inside of the cart table so now this delete karni ke jaroorat nahi hai 
+    if (items.findIndex((item) => item.product.id === product.id) < 0) {
       // we add productId field just to check if user will attemp to add the product which id alread in the cart so we will check through the productid
       const newItem = {
-        ...product,
-        productId: product.id,
+        product: product.id,  
         quantity: 1,
         user: user.id,
       };
-      delete newItem["id"];
       dispatch(addToCartAsync(newItem));
       alert.show("Item added in the Cart");
     } else {

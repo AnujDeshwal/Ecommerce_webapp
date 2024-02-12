@@ -4,7 +4,7 @@ import { NavLink, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteItemFromCartAsync, resetCartAsync, updateItemAsync } from '../features/cart/cartSlice';
 import { useForm } from 'react-hook-form';
-import { updateUserAsync } from '../features/auth/authSlice';
+import { updateUserAsync } from '../features/user/userSlice';
 import { createOrderAsync } from '../features/order/orderSlice';
 import { discountedPrice } from '../app/constants';
 
@@ -25,11 +25,11 @@ const CheckOut = () => {
         formState: { errors },
       } = useForm()
     // reduce() method in JavaScript is used to reduce the array to a single value and executes a provided function for each value of the array (from left to right) and the return value of the function is stored in an accumulator here accumulator is amount means as soon as first value is evaluated then you are adding accumulator value becasue it is type of += this previouse value is getting add  and accumulator is initialising as zero .
-    const totalAmount = items.reduce((amount,item)=>discountedPrice(item)*item.quantity + amount , 0);
+    const totalAmount = items.reduce((amount,item)=>discountedPrice(item.product)*item.quantity + amount , 0);
     const totalItems = items.reduce((total , item)=>item.quantity+total , 0);
     const handleQuantity =(e,item)=>{
         // here i put the + sign because value would come in string format and i want it in number so it will convert string to integer 
-        dispatch(updateItemAsync({...item , quantity:+e.target.value}))
+        dispatch(updateItemAsync({id:item.id, quantity:+e.target.value}))
     }
     const handleRemove =(e,itemid)=>{ 
         dispatch(deleteItemFromCartAsync(itemid))
@@ -43,8 +43,7 @@ const CheckOut = () => {
         setPaymentMethod(e.target.value)
     }
     const handleOrder=(e)=>{
-        console.log("hii")
-        const order = {items, totalAmount,totalItems , user,paymentMethod,
+        const order = {items, totalAmount,totalItems , user:user.id,paymentMethod,
             selectedAddress , status:'pending'//othere status can be delivered,received ,they would be selected by admin 
     }
         dispatch(createOrderAsync(order));
@@ -283,8 +282,8 @@ const CheckOut = () => {
                                             <li key={item.id} className="flex py-6">
                                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                                     <img
-                                                        src={item.thumbnail}
-                                                        alt={item.title}
+                                                        src={item.product.thumbnail}
+                                                        alt={item.product.title}
                                                         className="h-full w-full object-cover object-center"
                                                     />
                                                 </div>
@@ -293,11 +292,11 @@ const CheckOut = () => {
                                                     <div>
                                                         <div className="flex justify-between text-base font-medium text-gray-900">
                                                             <h3>
-                                                                <a href={item.href}>{item.title}</a>
+                                                                <a href={item.product.id}>{item.product.title}</a>
                                                             </h3>
-                                                            <p className="ml-4">{discountedPrice(item)}</p>
+                                                            <p className="ml-4">{discountedPrice(item.product)}</p>
                                                         </div>
-                                                        <p className="mt-1 text-sm text-gray-500">{item.brand}</p>
+                                                        <p className="mt-1 text-sm text-gray-500">{item.product.brand}</p>
                                                     </div>
                                                     <div className="flex  flex-1 items-end justify-between text-sm">
                                                         <div className="text-gray-500  ">Qty

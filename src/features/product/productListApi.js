@@ -7,6 +7,7 @@ export default function fetchAllProducts() {
     // firsly we did like we give data.json file to json-server package and it made api for us in below location in which that data.json files is being displayed .
     const response = await fetch(`http://localhost:8080/products`);
     const data = await response.json();
+    console.log("this is all products"+data)
     // you know in js we always resolve a promise with a value means if it get fulfilled or it get succeed so it returns a result with that arguement which you passed to the resolve function basically resolve function can take any datatype and ones promise get fulfilled it returns that data here we resolved it with a object has a key data , that why in the productSlice we are getting the response that response is nothing but just this object which we passed and accessing the data by response.data 
 
     resolve({data});

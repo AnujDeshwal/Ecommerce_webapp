@@ -68,7 +68,7 @@ return(
                 />
               </div>
               {errors.password && <p className='text-red-500'>{errors.password.message}</p>}
-              {error && <p className='text-red-500'>{error}</p>}
+              {error && <p className='text-red-500'>{error.message}</p>}
             </div>
 
             <div>

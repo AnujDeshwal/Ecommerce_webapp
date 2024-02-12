@@ -19,10 +19,16 @@ export const createUserAsync = createAsyncThunk(
 
 export const checkUserAsync = createAsyncThunk(
   'user/checkUser',
-  async (logInInfo) => {
-    const response = await checkUser(logInInfo);
+  async (logInInfo,{rejectWithValue}) => {
+    try{const response = await checkUser(logInInfo);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
+    }catch(error){
+      // here catch will only be executed if some above api call will be rejected so it will be rejected with the value which will come in the error section then by sending it to the predefined function rejectWithValue basically you are sending it to action.payload of extraReducers builder ke rejected waale case mai  then in that section you can easily send it to the state.error which is defined by use in the initialState 
+      console.log(error)
+      // dont forget to use return 
+       return  rejectWithValue(error);
+    }
   }
 );
 export const signOutAsync = createAsyncThunk(
@@ -33,14 +39,7 @@ export const signOutAsync = createAsyncThunk(
     return response.data;
   }
 );
-export const updateUserAsync = createAsyncThunk(
-  'user/updateUser',
-  async (update) => {
-    const response = await updateUser(update);
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
-  }
-);
+
 
 export const authSlice = createSlice({
   name: 'user',
@@ -70,15 +69,7 @@ export const authSlice = createSlice({
       })
       .addCase(checkUserAsync.rejected, (state , action) => {
         state.status = 'idle';
-        state.error = action.error;
-      })
-      .addCase(updateUserAsync.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(updateUserAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
-        // now loggedInUser ka data bhi update ho jayega api mai update toh kar hi diya vahi se toh action.payload mai data aaya hai 
-        state.loggedInUser=action.payload;
+        state.error = action.payload;
       })
       .addCase(signOutAsync.pending, (state) => {
         state.status = 'loading';

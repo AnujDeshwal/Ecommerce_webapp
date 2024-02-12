@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchLoggedInUser, fetchLoggedInUserOrders, updateUser } from './userApi';
 const initialState = {
- userOrders:[],
   status: 'idle',
   userInfo:null // this info will be used in case of detailed user info ,while auth will only be used for loggedInUser id etc checks
 };
@@ -49,7 +48,7 @@ export const updateUserAsync = createAsyncThunk(
       .addCase(fetchLoggedInUserOrdersAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         // this info can be different or more from loggedin User info jo loggedInUser auth mai tha 
-        state.userOrders = action.payload;
+        state.userInfo.orders = action.payload;
       })
       .addCase(updateUserAsync.pending, (state) => {
         state.status = 'loading';

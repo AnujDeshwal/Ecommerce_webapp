@@ -11,7 +11,7 @@ const UserOrders = () => {
   useEffect(() => {
     dispatch(fetchLoggedInUserOrdersAsync(user.id));
   }, [dispatch, user]);
-  const orders = useSelector((state) => state.user.userOrders);
+  const orders = useSelector((state) => state.user.userInfo.orders);
   console.log("this is orders" + orders);
   return (
     <>
@@ -32,8 +32,8 @@ const UserOrders = () => {
                       <li key={item.id} className="flex py-6">
                         <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                           <img
-                            src={item.thumbnail}
-                            alt={item.title}
+                            src={item.product.thumbnail}
+                            alt={item.product.title}
                             className="h-full w-full object-cover object-center"
                           />
                         </div>
@@ -42,12 +42,12 @@ const UserOrders = () => {
                           <div>
                             <div className="flex justify-between text-base font-medium text-gray-900">
                               <h3>
-                                <a href={item.href}>{item.title}</a>
+                                <a href={item.product.id}>{item.product.title}</a>
                               </h3>
-                              <p className="ml-4">${discountedPrice(item)}</p>
+                              <p className="ml-4">${discountedPrice(item.product)}</p>
                             </div>
                             <p className="mt-1 text-sm text-gray-500">
-                              {item.brand}
+                              {item.product.brand}
                             </p>
                           </div>
                           <div className="flex  flex-1 items-end justify-between text-sm">
