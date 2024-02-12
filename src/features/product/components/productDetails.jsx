@@ -68,9 +68,9 @@ const ProductDetails = () => {
         user: user.id,
       };
       dispatch(addToCartAsync(newItem));
-      alert.show("Item added in the Cart");
+      alert.success("Item added in the Cart");
     } else {
-      alert.show("Item already in the Cart");
+      alert.error("Item already in the Cart");
     }
   };
   return (

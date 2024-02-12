@@ -92,7 +92,8 @@ export default function AdminProductList() {
   useEffect(() => {
     const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
     // In Redux Toolkit's createAsyncThunk function, you cannot directly pass multiple parameters to the thunk function without using an object as the sole argument.
-    dispatch(fetchAllProductsByFilterAsync({ filter, sort, pagination }));
+    // since this page could be used by admin only so that is why only in case of admin this admin:true would be sent to as fouth parameter to this api otherwise it would be empty in case of normal person 
+    dispatch(fetchAllProductsByFilterAsync({ filter, sort, pagination ,admin:true}));
 
     // here as soon as dispatch and filter would have some changes useEffect will be called itself
   }, [dispatch, filter, sort, page]);

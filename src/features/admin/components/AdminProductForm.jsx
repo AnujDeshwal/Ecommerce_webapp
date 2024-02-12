@@ -4,7 +4,9 @@ import { useForm } from "react-hook-form";
 import { clearSelectedProduct, createProductAsync, fetchDetailsAsync, updateProductAsync } from "../../product/productSlice";
 import { useParams } from "react-router-dom";
 import Modal from "../../common/Modal";
+import { useAlert } from "react-alert";
 export const AdminProductForm = () => {
+  const alert = useAlert();
   const brands = useSelector((state) => state.product.brands);
   const categories = useSelector((state) => state.product.categories);
   const selectedProduct = useSelector(state=>state.product.details)
@@ -69,9 +71,11 @@ export const AdminProductForm = () => {
           product.id = params.id;
          if( selectedProduct.rating ) {product.rating=selectedProduct.rating}
          dispatch(updateProductAsync(product));
+         alert.success('Product updated');
          reset();
         } else { 
           dispatch(createProductAsync(product));
+          alert.success('Product created');
           reset();
         }
           })}>
