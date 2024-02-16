@@ -13,9 +13,9 @@ export default function addToCart(item) {
     resolve({data});
 });
 }
-export  function fetchItemsInCartByUserId(userid) {
+export  function fetchItemsInCartByUserId() {
   return new Promise(async (resolve) =>{
-    const response = await fetch('http://localhost:8080/cart?user='+userid );
+    const response = await fetch('http://localhost:8080/cart' );
     const data = await response.json();
     // console.log("data is"+ data)
     resolve({data});
@@ -47,10 +47,10 @@ export  function deleteItemFromCart(itemid) {
 });
 }
   // thunk function always expext a promise that why we do make new promise 
-  export function resetCart(userId) {
+  export function resetCart() {
     // get all items of user's cart - and then delete each
     return new Promise(async (resolve) => {
-      const response = await fetchItemsInCartByUserId(userId);
+      const response = await fetchItemsInCartByUserId();
       const items = response.data;
       // yaad rakho here we used for of loop not for in loop 
       for (let item of items) {

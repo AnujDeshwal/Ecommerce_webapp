@@ -4,9 +4,9 @@ import { signOutAsync } from '../authSlice';
 import { Navigate } from 'react-router-dom';
 const LogOut = () => {
     const dispatch = useDispatch();
-    const user = useSelector(state=>state.auth.loggedInUser)
+    const user = useSelector(state=>state.auth.loggedInUserToken)
     useEffect(()=>{
-        dispatch(signOutAsync(user.id));
+        dispatch(signOutAsync());
     } , [])
 return(
          <>

@@ -28,10 +28,11 @@ function classNames(...classes) {
 }
 const NavBar = ({ children }) => {
     const items = useSelector(state=>state.cart.items);
-    const user = useSelector(state=>state.auth.loggedInUser);
+    const user = useSelector(state=>state.user.userInfo);
     return (
         <>
-            <div className="min-h-full">
+        {/* user && pata hai apko it is because frontend mai error show na ho bhale andr gadbad hai  */}
+           {user && <div className="min-h-full">
                 <Disclosure as="nav" className="bg-gray-800">
                     {({ open }) => (
                         <>
@@ -207,7 +208,7 @@ const NavBar = ({ children }) => {
                     {/* -------------------------------CHILDREN component-------------------------------- */}
                     <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">{children}</div>
                 </main>
-            </div>
+            </div>}
         </>
     );
 }

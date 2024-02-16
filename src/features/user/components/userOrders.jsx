@@ -3,14 +3,14 @@ import { NavLink } from "react-router-dom";
 import { fetchLoggedInUserOrdersAsync } from "../userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { discountedPrice } from "../../../app/constants";
+import { Grid } from "react-loader-spinner";
 const UserOrders = () => {
   const [open, setOpen] = useState();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.loggedInUser);
-
+  const status = useSelector(state=>state.user.status);
   useEffect(() => {
-    dispatch(fetchLoggedInUserOrdersAsync(user.id));
-  }, [dispatch, user]);
+    dispatch(fetchLoggedInUserOrdersAsync());
+  }, [dispatch]);
   const orders = useSelector((state) => state.user.userInfo.orders);
   console.log("this is orders" + orders);
   return (
@@ -109,6 +109,18 @@ const UserOrders = () => {
             </div>
           </div>
         ))}
+          {status === "loading" ? (
+              <Grid
+                height="80"
+                width="80"
+                color="#4F46E5"
+                ariaLabel="grid-loading"
+                radius="12.5"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+              />
+            ) : null}
     </>
   );
 };

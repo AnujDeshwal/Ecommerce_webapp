@@ -29,11 +29,13 @@ export  function checkUser(logInInfo) {
     }
     else{
       // always remember that whenever your promise will be rejected so it will go back to the thunk and since the api function it called get rejected due to a error so you can use try catch there in the thunk to catch the error i sent in the reject 
-      const error = await response.json();
+      const error = await response.text();
+
       reject(error);
     }
   }catch(err){
     console.log("this is in the catch ")
+    // console.log(err)
     reject(err)
   }
     

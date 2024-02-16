@@ -10,7 +10,7 @@ const Login = () => {
     formState: { errors },
   } = useForm()
   const dispatch = useDispatch();
-  const user = useSelector(state=>state.auth.loggedInUser)
+  const user = useSelector(state=>state.auth.loggedInUserToken)
   const error = useSelector(state=>state.auth.error);
 return(
          <> 
@@ -68,7 +68,8 @@ return(
                 />
               </div>
               {errors.password && <p className='text-red-500'>{errors.password.message}</p>}
-              {error && <p className='text-red-500'>{error.message}</p>}
+              {/* here checkUser text error de raha hai means error ko hi print kar do but dusre api calling mai error json ho sakta hai where .message se hi pata chalega so dono mai se jo bhi hoga  */}
+              {error && <p className='text-red-500'>{error || error.message}</p>}
             </div>
 
             <div>

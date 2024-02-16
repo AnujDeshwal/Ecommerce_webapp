@@ -13,7 +13,7 @@ const Signup = () => {
     formState: { errors },
   } = useForm()
   const dispatch = useDispatch();
-  const user = useSelector(state=>state.auth.loggedInUser)
+  const user = useSelector(state=>state.auth.loggedInUserToken)
   console.log("this is user:"+user)
   console.log(errors)
   return (

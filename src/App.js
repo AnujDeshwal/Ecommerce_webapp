@@ -147,15 +147,16 @@ const router = createBrowserRouter([
   },
 ]);
 function App() {
-  const user = useSelector((state) => state.auth.loggedInUser);
+  const user = useSelector((state) => state.auth.loggedInUserToken);
   const dispatch = useDispatch();
   // console.log("cartItem"+useSelector(state=>state.cart.items));
   useEffect(() => {
     // without user you cannot display its cart items
     if (user) {
-      dispatch(fetchItemsInCartByUserIdAsync(user.id));
+      // we can get the user.id and user info by req.user in backend so do not need to give in frontend vese bhi here user mai koi user ki info nahi hai vo token hai jwt ka  
+      dispatch(fetchItemsInCartByUserIdAsync());
       // ek toh auth ka user hai that is just for id right now varna detail info hum userinfo mai rakhenge of in userSlice
-      dispatch(fetchLoggedInUserAsync(user.id));
+      dispatch(fetchLoggedInUserAsync());
       // we are fetching the data and showing the no. of items above the shopping cart icon and also will display that items in the cart section
     }
     // simple si baat hai useEffect is not gonna work until you give something whose state is changing so as soon as state got change it is activated so i put user ,only putting dispatch is not gonna work we put dispatch just for overcoming the warning otherwise no use

@@ -3,7 +3,7 @@ import createUser, { signOut } from './authApi';
 import { checkUser } from './authApi';
 import { updateUser } from '../user/userApi';
 const initialState = {
-  loggedInUser:null,
+  loggedInUserTokenToken:null,
   status: 'idle',
   error:null
 };
@@ -58,14 +58,14 @@ export const authSlice = createSlice({
       })
       .addCase(createUserAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.loggedInUser = action.payload;
+        state.loggedInUserToken = action.payload;
       })
       .addCase(checkUserAsync.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(checkUserAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.loggedInUser = action.payload;
+        state.loggedInUserToken = action.payload;
       })
       .addCase(checkUserAsync.rejected, (state , action) => {
         state.status = 'idle';
@@ -76,8 +76,8 @@ export const authSlice = createSlice({
       })
       .addCase(signOutAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        // now loggedInUser ka data bhi update ho jayega api mai update toh kar hi diya vahi se toh action.payload mai data aaya hai 
-        state.loggedInUser=null;
+        // now loggedInUserToken ka data bhi update ho jayega api mai update toh kar hi diya vahi se toh action.payload mai data aaya hai 
+        state.loggedInUserToken=null;
       })
   },
 });

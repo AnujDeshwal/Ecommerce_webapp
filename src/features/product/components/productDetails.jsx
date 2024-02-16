@@ -46,7 +46,6 @@ const ProductDetails = () => {
     // console.log("hi")
   }, [dispatch, params.id]);
   const product = useSelector((state) => state.product.details);
-  const user = useSelector((state) => state.auth.loggedInUser);
   const status = useSelector(state=>state.product.status);
   const items = useSelector((state) => state.cart.items);
   const [selectedColor, setSelectedColor] = useState(colors[0]);
@@ -64,8 +63,7 @@ const ProductDetails = () => {
       // we add productId field just to check if user will attemp to add the product which id alread in the cart so we will check through the productid
       const newItem = {
         product: product.id,  
-        quantity: 1,
-        user: user.id,
+        quantity: 1
       };
       dispatch(addToCartAsync(newItem));
       alert.success("Item added in the Cart");

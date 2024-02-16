@@ -44,7 +44,6 @@ const AdminProductDetails = () => {
     // console.log("hi")
   } , [dispatch , params.id])
   const product = useSelector(state=>state.product.details)
-  const user = useSelector(state=>state.auth.loggedInUser)
   const [selectedColor, setSelectedColor] = useState(colors[0])
   const [selectedSize, setSelectedSize] = useState(sizes[2])
   const handleCart=(e)=>{
@@ -55,7 +54,7 @@ const AdminProductDetails = () => {
     // ---------------------MAIN PROBLEM -------------
     // hai vese bhi ya main problem thi that add to cart button mai submit karne mai refresh hora and detail page is protected Protected.js mai jaake dekho so abhi cooki vagarey hai nahi toh user ki info gayab hori vo login page mai firse redirect kar de raha hai 
     // ==========Dekho here is like ki ham product ko spread karke bhej rahe hai so uski id bhi jayegi now uski id jayegi server mai so json -server  khud se nahi banayega ( that is a feature of json server) because id is already there now if do alag alag user ne same product apne cart mai daala toh id then product ki toh same hi hogi toh server mai duplicate id ho jayegi toh error aa jayega so hum object mai se id waali field delete karke bhej rahe hai 
-    const newItem = {...product ,quantity:1, user:user.id};
+    const newItem = {...product ,quantity:1};
     delete newItem['id'];
       dispatch(addToCartAsync(newItem));
   }

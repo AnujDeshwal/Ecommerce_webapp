@@ -7,14 +7,13 @@ import { resetOrder } from "../features/order/orderSlice";
 const OrderSuccessPage = () => {
     const params = useParams();
     const dispatch = useDispatch();
-    const user = useSelector(state=>state.auth.loggedInUser);
     
     useEffect(()=>{
-        dispatch(resetCartAsync(user.id));
+        dispatch(resetCartAsync());
         dispatch(resetOrder());
         // now here i also need to empty the current order but here i can not change it without dispatch but there is no use of calling thunk  becuase it will call api we just need to change that initialState field of reducer so you can do that by creating a simple action reducer in the orderSlice  
         
-    } , [dispatch ,user])
+    } , [dispatch])
 return( 
          <>
          {!params.id && <Navigate to='/' replace={true}></Navigate>}
