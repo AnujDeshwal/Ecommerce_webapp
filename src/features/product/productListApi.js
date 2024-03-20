@@ -5,7 +5,7 @@
 //   // ===This api call is just for that when you did not select any filter so at that case in just starting of react app as soon as react app opens this api call should  be executed so we used useEffect hook to do this functinality 
 //   return new Promise(async (resolve) =>{
 //     // firsly we did like we give data.json file to json-server package and it made api for us in below location in which that data.json files is being displayed .
-//     const response = await fetch(`http://localhost:8080/products`);
+//     const response = await fetch(`/products`);
 //     const data = await response.json();
 //     console.log("this is all products"+data)
 //     // you know in js we always resolve a promise with a value means if it get fulfilled or it get succeed so it returns a result with that arguement which you passed to the resolve function basically resolve function can take any datatype and ones promise get fulfilled it returns that data here we resolved it with a object has a key data , that why in the productSlice we are getting the response that response is nothing but just this object which we passed and accessing the data by response.data 
@@ -42,7 +42,7 @@ export  function fetchAllProductsByFilter(filter,sort,pagination,admin) {
     queryString += 'admin=true';
   }
   return new Promise(async (resolve) =>{
-    const response = await fetch(`http://localhost:8080/products?${queryString}`);
+    const response = await fetch(`/products?${queryString}`);
     const data = await response.json();
       // we are using x-total count because due to some restriction the server could send only subset of the totla items so we are ordering to send the all totalitems in the server
     const totalItems = await response.headers.get('X-Total-Count');
@@ -52,14 +52,14 @@ export  function fetchAllProductsByFilter(filter,sort,pagination,admin) {
 // we are not fetching brands and categories form the api 
 export  function fetchBrands() {
   return new Promise(async (resolve) =>{
-    const response = await fetch(`http://localhost:8080/brands`);
+    const response = await fetch(`/brands`);
     const data = await response.json();
     resolve({data});
   });
 }
 export  function fetchCategories() {
   return new Promise(async (resolve) =>{
-    const response = await fetch(`http://localhost:8080/categories`);
+    const response = await fetch(`/categories`);
     const data = await response.json();
     resolve({data});
   });
@@ -67,7 +67,7 @@ export  function fetchCategories() {
 export  function fetchDetails(id) {
   // console.log('anuj')
   return new Promise(async (resolve) =>{
-    const response = await fetch(`http://localhost:8080/Products/${id}`);
+    const response = await fetch(`/Products/${id}`);
     const data = await response.json();
     // console.log("datais"+data)
     resolve({data});
@@ -75,7 +75,7 @@ export  function fetchDetails(id) {
 }
 export function createProduct(product){
   return new Promise((async(resolve) =>{
-    const response = await fetch('http://localhost:8080/Products' , {
+    const response = await fetch('/Products' , {
       method:'POST',
       body:JSON.stringify(product),
       headers:{'content-type':'application/json'} , 
@@ -87,7 +87,7 @@ export function createProduct(product){
 
 export function updateProduct(product){
     return new Promise(async(resolve)=>{
-      const response = await fetch('http://localhost:8080/products/'+product.id , {
+      const response = await fetch('/products/'+product.id , {
         method:"PATCH",
         body:JSON.stringify(product),
         headers:{'content-type':'application/json'}

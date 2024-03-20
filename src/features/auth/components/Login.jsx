@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, Navigate } from 'react-router-dom';
-import { checkUserAsync } from '../authSlice';
+import { checkUserAsync, loginUserAsync } from '../authSlice';
 const Login = () => {
   const {
     register,
@@ -12,7 +12,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const user = useSelector(state=>state.auth.loggedInUserToken)
   const error = useSelector(state=>state.auth.error);
-return(
+return( 
          <> 
          {/* Specifying replace: true will cause the navigation to replace the current entry in the history stack instead of adding a new one. */}
          {user&& <Navigate to='/' replace={true}></Navigate>}
@@ -30,7 +30,7 @@ return(
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form noValidate className="space-y-6" onSubmit={handleSubmit((data)=>{
-            dispatch(checkUserAsync(data));
+            dispatch(loginUserAsync(data));
           })}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">

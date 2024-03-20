@@ -9,6 +9,7 @@ import Modal from "../common/Modal";
 
 const Cart = () => {
   const [open, setOpen] = useState(true);
+  const cartLoaded = useSelector(state=>state.cart.cartLoaded);
   const [openModal , setOpenModal] = useState(null);
   const items = useSelector((state) => state.cart.items);
   const status = useSelector(state=>state.cart.status);
@@ -29,8 +30,10 @@ const Cart = () => {
   return (
     <>
       {/* agar there is no elements in the carts it means cart is empty so no need to show cart it will redirect you to the hompage  */}
-      {items.length === 0 && <Navigate to="/" replace={true}></Navigate>}
-      
+       {/* cartLoaded is like ki cart mai info backend mai aayegi so it takes time till then react should wait like here we have put the condition like cartLoade true hona chahiye till ye navigate vaali cheej chalegi means cart mai jitne item aane the vo aa gaye hai and if now length is zero then home mai jao varna nahi  */}
+      {/* cartloaded is like ki refresh kara and items gayab us wakt toh items.length === 0 true hi ho jayega toh kuki null ho jayega then vo navigate kar jayega home page we do not need this home page mai tab hi jaaye if cart has no items in it in reality  */}
+      {items.length === 0 && cartLoaded && <Navigate to="/" replace={true}></Navigate>}
+      {/* vese bhi in refresh app.js load to hota hi hai to vaha pe cart items load ho rahe hai toh is page mai refresh karne mai error nahi aayenge tab tak app js cart mai item fetch kar raha hai  */}
       <div className="mx-auto mt-5 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-bold tracking-tight text-gray-900">
           Cart

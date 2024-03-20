@@ -81,7 +81,7 @@ export default function AdminProductList() {
   };
 
   const handleSort = (e, option) => {
-    // here in the json server it support sort querey like http://localhost:8080/products?_sort:price&_order:asc
+    // here in the json server it support sort querey like /products?_sort:price&_order:asc
     // means sort the price in the ascending order that is why both should be given and always remember that map could have only unique keys means if again you select any other sorting so same _sort and _order field would be replaced and same in case of filters
     const newSort = { _sort: option.sort, _order: option.order };
     setSort(newSort);

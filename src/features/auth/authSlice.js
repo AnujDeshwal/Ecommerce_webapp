@@ -1,11 +1,15 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import createUser, { signOut } from './authApi';
+import createUser, { checkAuth, loginUser, resetPassword, resetPasswordRequest, signOut } from './authApi';
 import { checkUser } from './authApi';
 import { updateUser } from '../user/userApi';
 const initialState = {
-  loggedInUserTokenToken:null,
+  loggedInUserToken:null,
   status: 'idle',
-  error:null
+  error:null,
+  userChecked:false ,
+  // this below is basically that if mailSent is true means just tell the user that email is sent to your email just check and click the link to reset the password 
+  mailSent:false,
+  passwordReset:false
 };
 
 export const createUserAsync = createAsyncThunk(
@@ -17,10 +21,37 @@ export const createUserAsync = createAsyncThunk(
   }
 );
 
-export const checkUserAsync = createAsyncThunk(
-  'user/checkUser',
+export const checkAuthAsync = createAsyncThunk(
+  'user/checkAuth',
+  async () => {
+    try{const response = await checkAuth();
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+    }catch(error){
+      // here catch will only be executed if some above api call will be rejected so it will be rejected with the value which will come in the error section then by sending it to the predefined function rejectWithValue basically you are sending it to action.payload of extraReducers builder ke rejected waale case mai  then in that section you can easily send it to the state.error which is defined by use in the initialState 
+      console.log(error)
+      // dont forget to use return 
+    }
+  }
+);
+export const resetPasswordRequestAsync = createAsyncThunk(
+  'user/resetPasswordRequest',
+  async (email,{rejectWithValue}) => {
+    try{const response = await resetPasswordRequest(email);
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+    }catch(error){
+      // here catch will only be executed if some above api call will be rejected so it will be rejected with the value which will come in the error section then by sending it to the predefined function rejectWithValue basically you are sending it to action.payload of extraReducers builder ke rejected waale case mai  then in that section you can easily send it to the state.error which is defined by use in the initialState 
+      console.log(error)
+      return rejectWithValue(error);
+      // dont forget to use return 
+    }
+  }
+);
+export const loginUserAsync = createAsyncThunk(
+  'user/loginUser',
   async (logInInfo,{rejectWithValue}) => {
-    try{const response = await checkUser(logInInfo);
+    try{const response = await loginUser(logInInfo);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
     }catch(error){
@@ -37,6 +68,19 @@ export const signOutAsync = createAsyncThunk(
     const response = await signOut(userid);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
+  }
+);
+export const resetPasswordAsync = createAsyncThunk(
+  'user/resetPassword',
+  async (data,{rejectWithValue}) => {
+    try{
+    const response = await resetPassword(data).catch(error => console.log(error));
+    return response.data;
+    }catch(error){
+      console.log(error);
+      // do always like reject with value to handle the error
+      return rejectWithValue(error);
+    }
   }
 );
 
@@ -60,14 +104,14 @@ export const authSlice = createSlice({
         state.status = 'idle';
         state.loggedInUserToken = action.payload;
       })
-      .addCase(checkUserAsync.pending, (state) => {
+      .addCase(loginUserAsync.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(checkUserAsync.fulfilled, (state, action) => {
+      .addCase(loginUserAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.loggedInUserToken = action.payload;
       })
-      .addCase(checkUserAsync.rejected, (state , action) => {
+      .addCase(loginUserAsync.rejected, (state , action) => {
         state.status = 'idle';
         state.error = action.payload;
       })
@@ -78,6 +122,38 @@ export const authSlice = createSlice({
         state.status = 'idle';
         // now loggedInUserToken ka data bhi update ho jayega api mai update toh kar hi diya vahi se toh action.payload mai data aaya hai 
         state.loggedInUserToken=null;
+      })
+      .addCase(checkAuthAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(checkAuthAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        // now loggedInUserToken ka data bhi update ho jayega api mai update toh kar hi diya vahi se toh action.payload mai data aaya hai 
+        state.loggedInUserToken=action.payload;
+        state.userChecked =true;
+      })
+      .addCase(checkAuthAsync.rejected, (state) => {
+        state.status = 'idle';
+        state.userChecked =true;
+      })
+      .addCase(resetPasswordRequestAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(resetPasswordRequestAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.mailSent = true;
+      })
+      .addCase(resetPasswordAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(resetPasswordAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.passwordReset = true;
+      })
+      .addCase(resetPasswordAsync.rejected, (state , action) => {
+        state.status = 'idle';
+        // due to rejectwith value , error come in action.payload now appropriate error will be shown , because if you do not handle the rejected request so i do not know but automatically it was setting the passwordReset to true 
+        state.error = action.payload;
       })
   },
 });

@@ -4,6 +4,7 @@ import addToCart, { deleteItemFromCart, fetchItemsInCartByUserId,  resetCart,  u
 const initialState = {
  items:[],
   status: 'idle',
+  cartLoaded:false
 };
 
 export const addToCartAsync = createAsyncThunk(
@@ -78,6 +79,11 @@ export const deleteItemFromCartAsync = createAsyncThunk(
         state.status = 'idle';
         // in this time we would not do like pushing one by one items to the cart because user can push more than one items in a cart but this time we are just assigning all items fetched from someone cart to its items list of cart 
         state.items=action.payload;
+        state.cartLoaded=true;
+      })
+      .addCase(fetchItemsInCartByUserIdAsync.rejected, (state) => {
+        state.status = 'idle';
+        state.cartLoaded=true;
       })
       .addCase(updateItemAsync.pending, (state) => {
         state.status = 'loading';

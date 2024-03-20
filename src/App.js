@@ -23,6 +23,9 @@ import AdminProductFormPage from "./pages/AdminProductFormPage";
 import AdminOrdersPage from "./pages/AdminOrdersPage";
 import { positions, Provider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
+import { checkAuthAsync } from "./features/auth/authSlice";
+import StripeCheckout from "./pages/StripeCheckout";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
  
 
 // this options are for alert that whenever they will be shown so for how long they should be shown and their position 
@@ -34,6 +37,7 @@ const options = {
 const router = createBrowserRouter([
   {
     path: "/",
+    // here basically protectd isliye kar rahe like user need to first login or register then only it can visit the website but if user just type "/" in the url after website means want to go to home page so if there would be not protection it will easily go to home without login or register 
     element: (
       <Protected>
         <Home />
@@ -85,7 +89,7 @@ const router = createBrowserRouter([
     element: (
       <Protected>
         <ProductDetailPage />
-      </Protected>
+        </Protected>
     ),
   },
   {
@@ -121,10 +125,18 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/orders",
+    path: "/my-orders",
     element: (
       <Protected>
         <UserOrdersPage></UserOrdersPage>
+      </Protected>
+    ),
+  },
+  {
+    path: "/stripe-checkout",
+    element: (
+      <Protected>
+        <StripeCheckout></StripeCheckout>
       </Protected>
     ),
   },
@@ -141,6 +153,10 @@ const router = createBrowserRouter([
     element: <ForgotPasswordPage></ForgotPasswordPage>,
   },
   {
+    path: "/reset-password",
+    element: <ResetPasswordPage></ResetPasswordPage>,
+  },
+  {
     // it means astrick aapka saare path se match kar jaat hai sabse neeche hai so that by koi listed path mila toh redirect ho jayega varna * toh hai hi
     path: "*",
     element: <Page404></Page404>,
@@ -148,10 +164,14 @@ const router = createBrowserRouter([
 ]);
 function App() {
   const user = useSelector((state) => state.auth.loggedInUserToken);
+  const userChecked=useSelector(state=>state.auth.userChecked);
   const dispatch = useDispatch();
+  useEffect(()=>{
+    dispatch(checkAuthAsync());
+  },[])
   // console.log("cartItem"+useSelector(state=>state.cart.items));
   useEffect(() => {
-    // without user you cannot display its cart items
+    // without user you cannot display its cart items 
     if (user) {
       // we can get the user.id and user info by req.user in backend so do not need to give in frontend vese bhi here user mai koi user ki info nahi hai vo token hai jwt ka  
       dispatch(fetchItemsInCartByUserIdAsync());
@@ -167,9 +187,15 @@ function App() {
       {/* Below line enable routing in your app  */}
       {/* below if the provider it is for Alert template which will provide alert template to the app.js so that we will use it efficiently  */}
       {/* this is used for stylish alert not traditional  */}
-      <Provider template={AlertTemplate} {...options}>
+
+      {/* basically problem was like when we were routing like url mai /orders kar rahe the toh toh server ko orders ki request jaati but in each page like orders also we have planted a check jo check karega that user available hai bhi tabhi toh orderes dikhayega uske varna home page mai redirect kardo so jabhi bhi aap request maarte ho toh user tab tak aaya hi nahi hai time lagta hai user ke aane mai kuki aap upar ek useEffect dekhoge jisme checkAuthAsync dispatch ho raha hai so vo user laa raha hai and it takes time to get the user from the backend tab tak react dekhra user toh hai hi nahi toh vo hume home mai redirect kar de raha tha toh humne ek status variable userChecked define kara in the authSlice where we will check jab user aa jayega tabhi saari routings kaam karegi 
+      here dekho i always used to think that if i refresh the page so user wagera gayab ho jata hai and  */}
+      {/* it is for every page refresh that after refresh vo page mai hi redirect ho kahi or na chale jaye  */}
+      {/* checkauth user ko vapas laa raha hai because after refresh redux store empty ho jata hai poora ka poora bhale hi koi sa bhi redux store ho tabhi user bhi lost ho jata hai  */}
+      {/* basically neeche jo lagaya hai na agar userChecked hai tabhi saari routing chalegi  */}
+      {userChecked &&  <Provider template={AlertTemplate} {...options}>
         <RouterProvider router={router} />
-      </Provider>
+      </Provider>}
     </div>
   );
 }

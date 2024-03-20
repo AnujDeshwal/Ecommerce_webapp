@@ -2,8 +2,9 @@ import React from 'react';
 import NavBar from '../features/navbar/NavBar';
 import AdminProductList from '../features/admin/components/adminProductList';
 import Footer from '../features/common/Footer';
+import { useSelector } from 'react-redux';
 const AdminHome = () => {
-return(
+ return(
          <>
             <NavBar>
                 {/* ProductList is the children of NavBar which is passed to the NavBar as a child  */}

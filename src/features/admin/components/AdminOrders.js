@@ -17,8 +17,15 @@ const AdminOrders = () => {
     setEditableOrderId(order.id);
   };
 
-  const handleUpdate = (e, order) => {
+  const handleOrderStatus = (e, order) => {
     const updatedOrder = { ...order, status: e.target.value };
+    console.log(e.target.value);
+    dispatch(updateOrderAsync(updatedOrder));
+    // as soon as like you will change pending to delivered so it will show delivered in the style format not in the select style
+    setEditableOrderId(-1);
+  };
+  const handleOrderPaymentStatus = (e, order) => {
+    const updatedOrder = { ...order, paymentStatus: e.target.value };
     console.log(e.target.value);
     dispatch(updateOrderAsync(updatedOrder));
     // as soon as like you will change pending to delivered so it will show delivered in the style format not in the select style
@@ -29,7 +36,7 @@ const AdminOrders = () => {
     setPage(page);
   };
   const handleSort = (sortOption) => {
-    // here in the json server it support sort querey like http://localhost:8080/products?_sort:price&_order:asc
+    // here in the json server it support sort querey like /products?_sort:price&_order:asc
     // means sort the price in the ascending order that is why both should be given and always remember that map could have only unique keys means if again you select any other sorting so same _sort and _order field would be replaced and same in case of filters
     const newSort = { _sort: sortOption.sort, _order: sortOption.order };
     setSort(newSort);
@@ -41,6 +48,8 @@ const AdminOrders = () => {
       case "dispatched":
         return "bg-yellow-200 text-yellow-600";
       case "delivered":
+        return "bg-green-200 text-green-600";
+      case "received":
         return "bg-green-200 text-green-600";
       case "cancelled":
         return "bg-red-200 text-red-600";
@@ -95,7 +104,9 @@ const AdminOrders = () => {
                       )}
                     </th>
                     <th className="py-3 px-6 text-center">Shipping Address</th>
-                    <th className="py-3 px-6 text-center">Status</th>
+                    <th className="py-3 px-6 text-center">Order Status</th>
+                    <th className="py-3 px-6 text-center">Payment Method</th>
+                    <th className="py-3 px-6 text-center">Payment Status</th>
                     <th className="py-3 px-6 text-center">Actions</th>
                   </tr>
                 </thead>
@@ -154,7 +165,7 @@ const AdminOrders = () => {
                         ) : (
                           <select
                             value={order.status}
-                            onChange={(e) => handleUpdate(e, order)}
+                            onChange={(e) => handleOrderStatus(e, order)}
                           >
                             <option value="pending">Pending</option>
                             <option value="dispatched">Dispatched</option>
@@ -163,6 +174,32 @@ const AdminOrders = () => {
                           </select>
                         )}
                       </td>
+                      <td className="py-3 px-6 text-center">
+                        <div className="flex items-center justify-center">
+                          {order.paymentMethod}
+                        </div>
+                      </td>
+                      <td className="py-3 px-6 text-center">
+                        {order.id !== editableOrderId ? (
+                          <span
+                            className={`${chooseColor(
+                              order.paymentStatus
+                            )} py-1 px-3 rounded-full text-xs`}
+                          >
+                            {order.paymentStatus}
+                          </span>
+                        ) : (
+                          <select
+                            value={order.paymentStatus}
+                            onChange={(e) => handleOrderPaymentStatus(e, order)}
+                          >
+                            <option value="pending">Pending</option>
+                            <option value="received">Received</option>
+                           
+                          </select>
+                        )}
+                      </td>
+                      
                       <td className="py-3 px-6 text-center">
                         <div className="flex item-center justify-center">
                           <div className="w-4 mr-4 transform hover:text-purple-500 hover:scale-110">

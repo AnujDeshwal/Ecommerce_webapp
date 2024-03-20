@@ -56,7 +56,8 @@ export const AdminProductForm = () => {
   }
   return (
     <>
-     <Modal title={`Delete ${selectedProduct.title}`} message="Are you sure you want to delete this cart item" dangerOption="delete" cancelOption="cancel" dangerAction={(e) => handleDelete()} showModal={openModal} setOpenModal={setOpenModal}></Modal>
+   
+    { selectedProduct && <Modal title={`Delete ${selectedProduct.title}`} message="Are you sure you want to delete this cart item" dangerOption="delete" cancelOption="cancel" dangerAction={(e) => handleDelete()} showModal={openModal} setOpenModal={setOpenModal}></Modal>}
       <form noValidate className="space-y-6" onSubmit={handleSubmit((data)=>{
         const product ={...data};
         product.images = [product.image1 , product.image2 , product.image3];
@@ -396,6 +397,7 @@ export const AdminProductForm = () => {
           </button>
         </div>
       </form>
+   
     </>
   );
 };

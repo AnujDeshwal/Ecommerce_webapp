@@ -11,7 +11,7 @@ const ProtectedAdmin = ({children}) =>{
         // Specifying replace: true will cause the navigation to replace the current entry in the history stack instead of adding a new one.
         return <Navigate to='/signin' replace={true}></Navigate>
     }
-    if(user && userInfo.role!=='admin'){
+    if(userInfo && userInfo.role!=='admin'){
         return <Navigate to='/' replace={true}></Navigate>
     }
     return children;
