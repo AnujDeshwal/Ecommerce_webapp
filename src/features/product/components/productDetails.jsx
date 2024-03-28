@@ -25,12 +25,12 @@ const sizes = [
   { name: "2XL", inStock: true },
   { name: "3XL", inStock: true },
 ];
-const highlights = [
-  "Hand cut and sewn locally",
-  "Dyed with our proprietary colors",
-  "Pre-washed & pre-shrunk",
-  "Ultra-soft 100% cotton",
-];
+// const highlights = [
+//   "Hand cut and sewn locally",
+//   "Dyed with our proprietary colors",
+//   "Pre-washed & pre-shrunk",
+//   "Ultra-soft 100% cotton",
+// ];
 const reviews = { href: "#", average: 4, totalCount: 117 };
 
 function classNames(...classes) {
@@ -65,6 +65,14 @@ const ProductDetails = () => {
         product: product.id,  
         quantity: 1
       };
+      // below both property would be added to the order so that seller would get an idea which size an color customer want  
+      // here the thing is although you are adding the color and size in the newItem but it wont save in the database because such field should exist in the schema also 
+      if(selectedColor){
+        newItem.color = selectedColor;
+      }
+      if(selectedSize){
+        newItem.color = selectedSize;
+      }
       dispatch(addToCartAsync(newItem));
       alert.success("Item added in the Cart");
     } else {
@@ -207,7 +215,7 @@ const ProductDetails = () => {
 
                 <form className="mt-10">
                   {/* Colors */}
-                  <div>
+                  {product.colors && product.colors.length>0 && <div>
                     <h3 className="text-sm font-medium text-gray-900">Color</h3>
 
                     <RadioGroup
@@ -219,7 +227,7 @@ const ProductDetails = () => {
                         Choose a color
                       </RadioGroup.Label>
                       <div className="flex items-center space-x-3">
-                        {colors.map((color) => (
+                        {product.colors.map((color) => (
                           <RadioGroup.Option
                             key={color.name}
                             value={color}
@@ -246,10 +254,10 @@ const ProductDetails = () => {
                         ))}
                       </div>
                     </RadioGroup>
-                  </div>
+                  </div>}
 
                   {/* Sizes */}
-                  <div className="mt-10">
+                  {product.sizes && product.sizes.length>0 && <div className="mt-10">
                     <div className="flex items-center justify-between">
                       <h3 className="text-sm font-medium text-gray-900">
                         Size
@@ -271,7 +279,7 @@ const ProductDetails = () => {
                         Choose a size
                       </RadioGroup.Label>
                       <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
-                        {sizes.map((size) => (
+                        {product.sizes.map((size) => (
                           <RadioGroup.Option
                             key={size.name}
                             value={size}
@@ -329,7 +337,7 @@ const ProductDetails = () => {
                         ))}
                       </div>
                     </RadioGroup>
-                  </div>
+                  </div>}
 
                   <button
                     onClick={handleCart}
@@ -353,7 +361,7 @@ const ProductDetails = () => {
                   </div>
                 </div>
 
-                <div className="mt-10">
+              { product.highlights && <div className="mt-10">
                   <h3 className="text-sm font-medium text-gray-900">
                     Highlights
                   </h3>
@@ -363,14 +371,14 @@ const ProductDetails = () => {
                       role="list"
                       className="list-disc space-y-2 pl-4 text-sm"
                     >
-                      {highlights.map((highlight) => (
+                      {product.highlights.map((highlight) => (
                         <li key={highlight} className="text-gray-400">
                           <span className="text-gray-600">{highlight}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
-                </div>
+                </div>}
 
                 <div className="mt-10">
                   <h2 className="text-sm font-medium text-gray-900">Details</h2>

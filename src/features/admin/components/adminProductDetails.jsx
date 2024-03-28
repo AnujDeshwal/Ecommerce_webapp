@@ -9,21 +9,7 @@ import { addToCartAsync } from '../../cart/cartSlice';
 import { discountedPrice } from '../../../app/constants';
 
  
-  const colors = [
-    { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-    { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-    { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' },
-  ]
-  const sizes = [
-    { name: 'XXS', inStock: false },
-    { name: 'XS', inStock: true },
-    { name: 'S', inStock: true },
-    { name: 'M', inStock: true },
-    { name: 'L', inStock: true },
-    { name: 'XL', inStock: true },
-    { name: '2XL', inStock: true },
-    { name: '3XL', inStock: true },
-  ]
+
   const highlights = [
     'Hand cut and sewn locally',
     'Dyed with our proprietary colors',
@@ -44,8 +30,8 @@ const AdminProductDetails = () => {
     // console.log("hi")
   } , [dispatch , params.id])
   const product = useSelector(state=>state.product.details)
-  const [selectedColor, setSelectedColor] = useState(colors[0])
-  const [selectedSize, setSelectedSize] = useState(sizes[2])
+  const [selectedColor, setSelectedColor] = useState()
+  const [selectedSize, setSelectedSize] = useState()
   const handleCart=(e)=>{
     // konsa product kis user ne cart mai daala hai then cart vaale section mai particular bande ke saare saare cart items bhi usi user id se fetch karenge  
     e.preventDefault();
@@ -55,6 +41,13 @@ const AdminProductDetails = () => {
     // hai vese bhi ya main problem thi that add to cart button mai submit karne mai refresh hora and detail page is protected Protected.js mai jaake dekho so abhi cooki vagarey hai nahi toh user ki info gayab hori vo login page mai firse redirect kar de raha hai 
     // ==========Dekho here is like ki ham product ko spread karke bhej rahe hai so uski id bhi jayegi now uski id jayegi server mai so json -server  khud se nahi banayega ( that is a feature of json server) because id is already there now if do alag alag user ne same product apne cart mai daala toh id then product ki toh same hi hogi toh server mai duplicate id ho jayegi toh error aa jayega so hum object mai se id waali field delete karke bhej rahe hai 
     const newItem = {...product ,quantity:1};
+    // below things will be saved inside of order so that admin will get to know that i want black iphone  with small size 
+    if(selectedColor){
+      newItem.color = selectedColor;
+    }
+    if(selectedSize){
+      newItem.size = selectedSize;
+    }
     delete newItem['id'];
       dispatch(addToCartAsync(newItem));
   }
@@ -160,15 +153,15 @@ return(
               </div>
             </div>
 
-            <form className="mt-10">
+             <form className="mt-10">
               {/* Colors */}
-              <div>
+             { product.colors && product.colors.length>0 &&<div>
                 <h3 className="text-sm font-medium text-gray-900">Color</h3>
 
                 <RadioGroup value={selectedColor} onChange={setSelectedColor} className="mt-4">
                   <RadioGroup.Label className="sr-only">Choose a color</RadioGroup.Label>
                   <div className="flex items-center space-x-3">
-                    {colors.map((color) => (
+                    {product.colors.map((color) => (
                       <RadioGroup.Option
                         key={color.name}
                         value={color}
@@ -195,10 +188,10 @@ return(
                     ))}
                   </div>
                 </RadioGroup>
-              </div>
+              </div>}
 
               {/* Sizes */}
-              <div className="mt-10">
+              {product.sizes && product.sizes.length>0 && <div className="mt-10">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-medium text-gray-900">Size</h3>
                   <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
@@ -208,8 +201,8 @@ return(
 
                 <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-4">
                   <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
-                  <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
-                    {sizes.map((size) => (
+                <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
+                    {product.sizes.map((size) => (
                       <RadioGroup.Option
                         key={size.name}
                         value={size}
@@ -257,7 +250,7 @@ return(
                     ))}
                   </div>
                 </RadioGroup>
-              </div>
+              </div>}
 
               <button onClick={handleCart}
                 type="submit"
@@ -267,7 +260,7 @@ return(
               </button>
             </form>
           </div>
-
+ 
           <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
             {/* Description and details */}
             <div>

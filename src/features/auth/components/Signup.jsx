@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, Navigate } from 'react-router-dom';
 // In this we will are using react-hook-form package it needs to be installed it makes fetching data from form and validation of form easy  , previously we used to do like taking values from onChange and set the value onSumbiting but here direct there is register function which directly create state for each input elements just pass their name inside register and also it take required field which specify whether this field is required or not you can do like {required:true} and if you want to show some message so do like {required:"password is required"} basically we are removing the html basica validation method like required because in this time it will depend on browser what message they show in required but if we want to customise we can do it easily when you submit without complete the required field so that message which we give inside the required field come as message in the error varaible automatically you can fetch that message from the error variable of formState ,Autocomplete allows the browser to predict the value. When a user starts to type in a field, the browser should display options to fill in the field, based on earlier typed values , if there would be any error message so it will not let you submit it 
 import { useForm, SubmitHandler } from "react-hook-form"
-import { createUserAsync } from '../authSlice';
+import { createUserAsync, otpgenerationAsync } from '../authSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import OtpInput from './OtpInput';
+import { CircularProgress } from '@mui/material';
 
 const Signup = () => {
+  const [otpfield,setOptfield] = useState(false);
+  const OTP = useSelector(state=>state.auth.otp);
+  const error = useSelector(state => state.auth.error);
+  const [bool , setBool] = useState(true);
+  if(bool && OTP){
+    setOptfield(true)
+    setBool(false);
+  }
+  console.log("this is otpfeilid,",otpfield)
+  const [details , setDetails] = useState(null);
+  const [wrongOtp,setWrongOtp] = useState(false);
   const {
     register,
     handleSubmit,
@@ -14,13 +27,25 @@ const Signup = () => {
   } = useForm()
   const dispatch = useDispatch();
   const user = useSelector(state=>state.auth.loggedInUserToken)
+  const status = useSelector(state=>state.auth.status)
   console.log("this is user:"+user)
   console.log(errors)
+  
+  const onOtpSubmit = (otpFromUser)=>{
+    console.log("this is from user:",otpFromUser+"and this is real:",OTP)
+    if(otpFromUser === OTP){
+      dispatch(createUserAsync({email:details.email , password:details.password , addresses:[],role:'user'}));
+      // setOptfield(false);
+    }
+    else{
+      setWrongOtp(true);
+    }
+  }
   return (
     <>
-    {user&& <Navigate to='/' replace={true}></Navigate>}
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+    {user && <Navigate to='/' replace={true}></Navigate>}
+      {(!otpfield || !details) ? <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+        <div className="overflow-hidden  sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             className="mx-auto h-10 w-auto"
             src="/ecommerce.png"
@@ -36,8 +61,12 @@ const Signup = () => {
           <form noValidate className="space-y-6" onSubmit={handleSubmit((data) => {
             // basically here confirm password is also stroed in this data but we do not want it thats why we did below thing without sending directly the data 
             console.log(data)  
-            // while doing checkout we will add adresses in it 
-            dispatch(createUserAsync({email:data.email , password:data.password , addresses:[],role:'user'}))
+            // while doing checkout we will add adresses in it
+            setDetails(data) 
+            
+            dispatch(otpgenerationAsync(data.email));
+            console.log("tihs is the error:",error);
+            // setOptfield(true);
           })}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
@@ -89,7 +118,7 @@ const Signup = () => {
               {errors.confirmPassword && <p className='text-red-500'>{errors.confirmPassword.message}</p>}
               </div>
             </div>
-            <div>
+            <div> 
               <button
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -98,7 +127,8 @@ const Signup = () => {
               </button>
             </div>
           </form>
-
+          { status === 'loading' && <CircularProgress color="success" style={{marginTop:"10px"}} />}
+          {error  && <p className='text-red-500'>{error}</p>}
           <p className="mt-10 text-center text-sm text-gray-500">
             Already a member?{' '}
             <NavLink to='/signin' className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
@@ -106,7 +136,8 @@ const Signup = () => {
             </NavLink>
           </p>
         </div>
-      </div>
+        
+      </div>: <OtpInput length = {6} onOtpSubmit={onOtpSubmit} email={details.email} status={status} OTP={OTP} wrong = {wrongOtp} />}
     </>
   );
 }

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import createUser, { checkAuth, loginUser, resetPassword, resetPasswordRequest, signOut } from './authApi';
+import createUser, { checkAuth, loginUser, otpgeneration, resetPassword, resetPasswordRequest, signOut } from './authApi';
 import { checkUser } from './authApi';
 import { updateUser } from '../user/userApi';
 const initialState = {
@@ -9,7 +9,8 @@ const initialState = {
   userChecked:false ,
   // this below is basically that if mailSent is true means just tell the user that email is sent to your email just check and click the link to reset the password 
   mailSent:false,
-  passwordReset:false
+  passwordReset:false,
+  otp:null
 };
 
 export const createUserAsync = createAsyncThunk(
@@ -64,8 +65,16 @@ export const loginUserAsync = createAsyncThunk(
 );
 export const signOutAsync = createAsyncThunk(
   'user/signout',
-  async (userid) => {
-    const response = await signOut(userid);
+  async () => {
+    const response = await signOut();
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  }
+);
+export const otpgenerationAsync = createAsyncThunk(
+  'user/otpgeneration',
+  async (email) => {
+    const response = await otpgeneration(email);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
@@ -154,6 +163,18 @@ export const authSlice = createSlice({
         state.status = 'idle';
         // due to rejectwith value , error come in action.payload now appropriate error will be shown , because if you do not handle the rejected request so i do not know but automatically it was setting the passwordReset to true 
         state.error = action.payload;
+      })
+      .addCase(otpgenerationAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(otpgenerationAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.otp = action.payload;
+        state.error = null;
+      })
+      .addCase(otpgenerationAsync.rejected, (state, action) => {
+        state.status = 'idle';
+        state.error = "User already exist";
       })
   },
 });

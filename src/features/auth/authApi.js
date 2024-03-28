@@ -67,10 +67,24 @@ export  function checkAuth(logInInfo) {
     
 });
 }
-// A mock function to mimic making an async request for data
-export function signOut (userid) {
-  return new Promise(async (resolve) =>{
-    resolve({data:'success'});
+
+export  function signOut() {
+  return new Promise(async (resolve , reject) =>{
+//you know if we have to do logout feature means here we have to remove the session from the backend , so that if you did logout you go to the sigin page but when you do refresh you will be logged in again automatically because it will check the session on the refresh and it will log you in  automatically  
+  try{  const response = await fetch(`/auth/logout`); 
+    if(response.ok){
+      // very important here that it is the get request but from the backend we are not sending anything which means here response has nothing so it will not be changed to json so it can create a error and then it can be rejected so simply do not write await response.json()
+      // const data = await response.json();
+      resolve({data:'success'})
+    }
+    else{
+      const error = await response.text();
+      reject(error);
+    }
+  }catch(err){
+    reject(err)
+  }
+    
 });
 }
 // basically here user is just requesting to reset the password but password it not reset yet because until user wont click on the link sent to the gmail password will not be reset so for that on click the reset link we will make another api to reset the password 
@@ -119,6 +133,38 @@ export  function resetPassword(data) {
       resolve({data})
     }
     else{
+      const error = await response.text();
+
+      reject(error);
+    }
+  }catch(err){
+    console.log("this is in the catch ")
+    reject(err)
+  }
+    
+});
+}
+export  function otpgeneration(email) {
+  return new Promise(async (resolve , reject) =>{
+// console.log("helloin inside of api")
+  try{  
+    console.log("this is email:",email)
+    const response = await fetch(`/auth/otp`,{
+      method:'POST',
+      // below thing is like we are getting a string or just email so we can not directly pass it to the JSON.sttingify because it is expecting a json but you are putting a string instead whicih will give you a error 
+      body:JSON.stringify({email}),
+      headers:{'content-type':'application/json'}
+    });
+
+    if(response.ok){
+      console.log("helllo anuj")
+      const res = await response.json();
+      const data = res.OTP;
+      resolve({data})
+    }
+    else{
+      console.log("here is the error")
+      console.log("this is the response:",response)
       const error = await response.text();
 
       reject(error);

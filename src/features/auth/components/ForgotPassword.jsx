@@ -69,7 +69,7 @@ const ForgotPassword = () => {
               {mailSent && (
                 <p className="text-green-500">Mail Sent Successfully</p>
               )}
-              { status == 'loading' && <CircularProgress color="success" style={{marginTop:"10px"}} />}
+              { status === 'loading' && <CircularProgress color="success" style={{marginTop:"10px"}} />}
             </div>
 
             <div>
