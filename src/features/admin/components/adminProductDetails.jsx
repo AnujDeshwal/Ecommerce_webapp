@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchDetailsAsync } from '../../product/productSlice';
 import { addToCartAsync } from '../../cart/cartSlice';
-import { discountedPrice } from '../../../app/constants';
 
  
 
@@ -87,7 +86,7 @@ return(
         </nav>
 
         {/* Image gallery */}
-        <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
+       {product.images &&  <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
           <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
             <img
               src={product.images[0]}
@@ -118,7 +117,7 @@ return(
               className="h-full w-full object-cover object-center"
             />
           </div>
-        </div>
+        </div>}
 
         {/* Product info */}
         <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
@@ -130,7 +129,7 @@ return(
           <div className="mt-4 lg:row-span-3 lg:mt-0">
             <h2 className="sr-only">Product information</h2>
             <p className="text-3xl line-through tracking-tight text-gray-900">${product.price}</p>
-            <p className="text-3xl  tracking-tight text-gray-900">${discountedPrice(product)}</p>
+            <p className="text-3xl  tracking-tight text-gray-900">${product.discountPrice}</p>
 
             {/* Reviews */}
             <div className="mt-6">

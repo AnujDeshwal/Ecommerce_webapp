@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchDetailsAsync } from "../productSlice";
 import { addToCartAsync } from "../../cart/cartSlice";
-import { discountedPrice } from "../../../app/constants";
 import { useAlert } from "react-alert";
 import { Grid } from "react-loader-spinner";
 
@@ -73,8 +72,7 @@ const ProductDetails = () => {
       if(selectedSize){
         newItem.color = selectedSize;
       }
-      dispatch(addToCartAsync(newItem));
-      alert.success("Item added in the Cart");
+      dispatch(addToCartAsync({item:newItem,alert}));
     } else {
       alert.error("Item already in the Cart");
     }
@@ -140,7 +138,7 @@ const ProductDetails = () => {
             </nav>
 
             {/* Image gallery */}
-            <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
+            {product.images && <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
               <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
                 <img
                   src={product.images[0]}
@@ -171,7 +169,7 @@ const ProductDetails = () => {
                   className="h-full w-full object-cover object-center"
                 />
               </div>
-            </div>
+            </div>} 
 
             {/* Product info */}
             <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
@@ -188,7 +186,7 @@ const ProductDetails = () => {
                   ${product.price}
                 </p>
                 <p className="text-3xl tracking-tight text-gray-900">
-                  ${discountedPrice(product)}
+                  ${product.discountPrice}
                 </p>
 
                 {/* Reviews */}

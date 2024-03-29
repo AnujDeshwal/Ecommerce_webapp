@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { fetchLoggedInUserOrdersAsync } from "../userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { discountedPrice } from "../../../app/constants";
 import { Grid } from "react-loader-spinner";
 const UserOrders = () => {
   const [open, setOpen] = useState();
@@ -44,7 +43,7 @@ const UserOrders = () => {
                               <h3>
                                 <a href={item.product.id}>{item.product.title}</a>
                               </h3>
-                              <p className="ml-4">${discountedPrice(item.product)}</p>
+                              <p className="ml-4">${item.product.discountPrice}</p>
                             </div>
                             <p className="mt-1 text-sm text-gray-500">
                               {item.product.brand}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchAllOrdersAsync, updateOrderAsync } from "../../order/orderSlice";
-import { ITEMS_PER_PAGE, discountedPrice } from "../../../app/constants";
+import { ITEMS_PER_PAGE } from "../../../app/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { PencilIcon, EyeIcon, ArrowUpIcon,ArrowDownIcon} from "@heroicons/react/24/outline";
 import { Pagination } from "../../common/Pagination";
@@ -162,7 +162,7 @@ const AdminOrders = () => {
                             </div>
                             <span className="w-full">
                               {item.product.title} - #{item.quantity} - $
-                              {discountedPrice(item.product)}
+                              {item.product.discountPrice}
                             </span>
                           </div>
                         ))}

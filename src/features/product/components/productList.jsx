@@ -7,7 +7,7 @@ import {
   fetchCategoriesAsync,
   fetchDetailsAsync,
 } from "../productSlice";
-import { ITEMS_PER_PAGE, discountedPrice } from "../../../app/constants";
+import { ITEMS_PER_PAGE } from "../../../app/constants";
 import { Fragment, useEffect, useState } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -26,8 +26,8 @@ const sortOptions = [
   // of course best rating means on the top highest rated products should lie
   { name: "Best Rating", sort: "rating", order: "desc", current: false },
   // rememeber here in the sort field we are putting the name of key we have in our data like price we have in our date fetching from the api
-  { name: "Price: Low to High", sort: "price", order: "asc", current: false },
-  { name: "Price: High to Low", sort: "price", order: "desc", current: false },
+  { name: "Price: Low to High", sort: "discountPrice", order: "asc", current: false },
+  { name: "Price: High to Low", sort: "discountPrice", order: "desc", current: false },
 ];
 
 function classNames(...classes) {
@@ -536,7 +536,7 @@ const ProductGrid = ({ products }) => {
                     </div>
                     <div>
                       <p className="text-sm font-medium text-gray-900">
-                        ${discountedPrice(product)}
+                        ${product.discountPrice}
                       </p>
                       <p className="text-sm font-medium line-through text-gray-400">
                         ${product.price}

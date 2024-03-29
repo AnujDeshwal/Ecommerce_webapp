@@ -9,7 +9,7 @@ const user = {
     name: 'Tom Cook',
     email: 'tom@example.com',
     imageUrl:
-        'https://is.zobj.net/image-server/v1/images?r=LmH7QXbE427uWEivPnIj5r6x2wTxSwavTVlEsiPjlQiGVrNcIdEJm3SikpnActIi9pRNHpLJv3wFfWC70EN5Q3QSKzVH5yGz_OVPWUkZgCSGuK4icL1w8rmzqmZ24xiwOE-tsAi5wvNuo0TZA-c-P7-MfcJw39MxSi0R0K_xgA8HBB2f0ew9MD-Q7AzSr8RbJWH9d1cqBZOOyTrdmNav9-hb5o1tV75_tdBiFxh7f3I95O9sfWhICBU0xfU',
+        'https://cdn2.vectorstock.com/i/1000x1000/92/16/default-profile-picture-avatar-user-icon-vector-46389216.jpg',
 }
 const navigation = [
     // here user:true states that it is just for user and admin:true means it is just for admin 
@@ -29,6 +29,7 @@ function classNames(...classes) {
 const NavBar = ({ children }) => {
     const items = useSelector(state=>state.cart.items);
     const user = useSelector(state=>state.user.userInfo);
+    // console.log(user.imageUrl)
     return (
         <>
         {/* user && pata hai apko it is because frontend mai error show na ho bhale andr gadbad hai  */}
@@ -88,9 +89,9 @@ const NavBar = ({ children }) => {
                                             <Menu as="div" className="relative ml-3">
                                                 <div>
                                                     <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                                                        <span className="absolute -inset-1.5" />
+                                                        <span className="absolute -inset-1user.imageUrl.5" />
                                                         <span className="sr-only">Open user menu</span>
-                                                        <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
+                                                        <img className="h-9 w-9 rounded-full" src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="" />
                                                     </Menu.Button>
                                                 </div>
                                                 <Transition
