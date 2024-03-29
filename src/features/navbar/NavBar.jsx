@@ -4,6 +4,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link, NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useAlert } from 'react-alert';
 
 const user = {
     name: 'Tom Cook',
@@ -29,6 +30,12 @@ function classNames(...classes) {
 const NavBar = ({ children }) => {
     const items = useSelector(state=>state.cart.items);
     const user = useSelector(state=>state.user.userInfo);
+    const alert = useAlert();
+    const empty = ()=>{
+        if(items.length === 0){
+            alert.info("Cart is empty");
+          }
+    }
     // console.log(user.imageUrl)
     return (
         <>
@@ -72,7 +79,7 @@ const NavBar = ({ children }) => {
                                     </div>
                                     <div className="hidden md:block">
                                         <div className="ml-4 flex items-center md:ml-6">
-                                            <NavLink to="/cart">
+                                            <NavLink onClick={empty} to="/cart">
                                             <button
                                                 type="button"
                                                 className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
@@ -207,7 +214,7 @@ const NavBar = ({ children }) => {
                 </header>
                 <main>
                     {/* -------------------------------CHILDREN component-------------------------------- */}
-                    <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">{children}</div>
+                    <div className="mx-auto bg-gray-100 max-w-7xl py-6 sm:px-6 lg:px-8">{children}</div>
                 </main>
             </div>}
         </>

@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { NavLink, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteItemFromCartAsync, updateItemAsync } from "./cartSlice";
 import { Grid } from "react-loader-spinner";
 import Modal from "../common/Modal";
+import { useAlert } from "react-alert";
 
 const Cart = () => {
   const [open, setOpen] = useState(true);
+  const alert = useAlert();
   const cartLoaded = useSelector(state=>state.cart.cartLoaded);
   const [openModal , setOpenModal] = useState(null);
   const items = useSelector((state) => state.cart.items);
+  // useEffect(()=>{
+    
+  // },[])
+  
   const status = useSelector(state=>state.cart.status);
   const dispatch = useDispatch();
   // reduce() method in JavaScript is used to reduce the array to a single value and executes a provided function for each value of the array (from left to right) and the return value of the function is stored in an accumulator here accumulator is amount means as soon as first value is evaluated then you are adding accumulator value becasue it is type of += this previouse value is getting add  and accumulator is initialising as zero .
@@ -18,6 +24,7 @@ const Cart = () => {
     (amount, item) => item.product.discountPrice * item.quantity + amount,0
   );
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);
+  
   const handleQuantity = (e, item) => {
     // here i put the + sign because value would come in string format and i want it in number so it will convert string to integer
     dispatch(updateItemAsync({ id:item.id, quantity: +e.target.value }));
