@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import Home from "./pages/Home";
+import {Toaster} from "react-hot-toast"
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
@@ -196,6 +197,7 @@ function App() {
       {userChecked &&  <Provider template={AlertTemplate} {...options}>
         <RouterProvider router={router} />
       </Provider>}
+      <Toaster position="bottom-center" />
     </div>
   );
 }
