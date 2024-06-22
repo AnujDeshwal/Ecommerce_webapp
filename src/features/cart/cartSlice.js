@@ -28,6 +28,7 @@ export const updateItemAsync = createAsyncThunk(
   // ya ye neeche waale naam hai saare different hone chahiye 
   'cart/updateItem',
   async (update) => {
+  
     const response = await updateItem(update);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
@@ -91,7 +92,7 @@ export const deleteItemFromCartAsync = createAsyncThunk(
       })
       .addCase(updateItemAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        const index = state.items.findIndex(item=>item.id===action.payload.id);
+        const index = state.items?.findIndex(item=>item.id===action.payload.id);
         state.items[index]=action.payload;
       })
       .addCase(deleteItemFromCartAsync.pending, (state) => {
@@ -99,7 +100,7 @@ export const deleteItemFromCartAsync = createAsyncThunk(
       })
       .addCase(deleteItemFromCartAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        const index = state.items.findIndex(item=>item.id===action.payload.id);
+        const index = state.items?.findIndex(item=>item.id===action.payload.id);
         state.items.splice(index,1);
       })
       .addCase(resetCartAsync.pending, (state) => {

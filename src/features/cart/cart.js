@@ -20,7 +20,7 @@ const Cart = () => {
   const status = useSelector(state=>state.cart.status);
   const dispatch = useDispatch();
   // reduce() method in JavaScript is used to reduce the array to a single value and executes a provided function for each value of the array (from left to right) and the return value of the function is stored in an accumulator here accumulator is amount means as soon as first value is evaluated then you are adding accumulator value becasue it is type of += this previouse value is getting add  and accumulator is initialising as zero .
-  const totalAmount = items.reduce(
+  const totalAmount = items?.reduce(
     (amount, item) => item.product.discountPrice * item.quantity + amount,0
   );
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);

@@ -3,6 +3,7 @@ import { server } from "../../app/constants";
 export default function createOrder(order) {
   return new Promise(async (resolve) =>{
     const response = await fetch(`${server}/orders`, {
+      credentials:"include",
       method:'POST',
       body:JSON.stringify(order),
       headers:{"content-type":"application/json"}
@@ -16,6 +17,7 @@ export default function createOrder(order) {
 export  function updateOrder(order) {
   return new Promise(async (resolve) =>{
     const response = await fetch(`${server}/orders/`+ order.id , {
+      credentials:"include",
       method:'PATCH',
       body:JSON.stringify(order),
       headers:{"content-type":"application/json"}
@@ -39,7 +41,7 @@ for(let key in sort){
 console.log("this is querystrign" + queryString)
 
 return new Promise(async (resolve) =>{
-  const response = await fetch(`${server}/orders?${queryString}`);
+  const response = await fetch(`${server}/orders?${queryString}` , {credentials:"include",});
   const data = await response.json();
   // we are using x-total count because due to some restriction the server could send only subset of the totla items so we are ordering to send the all totalitems in the server 
   const totalOrders = await response.headers.get('X-Total-Count');

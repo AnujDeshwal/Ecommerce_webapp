@@ -42,7 +42,7 @@ export  function fetchAllProductsByFilter(filter,sort,pagination,admin) {
     queryString += 'admin=true';
   }
   return new Promise(async (resolve) =>{
-    const response = await fetch(`${server}/products?${queryString}`);
+    const response = await fetch(`${server}/products?${queryString}`,{credentials:"include",});
     const data = await response.json();
       // we are using x-total count because due to some restriction the server could send only subset of the totla items so we are ordering to send the all totalitems in the server
     const totalItems = await response.headers.get('X-Total-Count');
@@ -52,14 +52,14 @@ export  function fetchAllProductsByFilter(filter,sort,pagination,admin) {
 // we are not fetching brands and categories form the api 
 export  function fetchBrands() {
   return new Promise(async (resolve) =>{
-    const response = await fetch(`${server}/brands`);
+    const response = await fetch(`${server}/brands`,{credentials:"include",});
     const data = await response.json();
     resolve({data});
   });
 }
 export  function fetchCategories() {
   return new Promise(async (resolve) =>{
-    const response = await fetch(`${server}/categories`);
+    const response = await fetch(`${server}/categories`,{credentials:"include",});
     const data = await response.json();
     resolve({data});
   });
@@ -67,7 +67,7 @@ export  function fetchCategories() {
 export  function fetchDetails(id) {
   // console.log('anuj')
   return new Promise(async (resolve) =>{
-    const response = await fetch(`${server}/Products/${id}`);
+    const response = await fetch(`${server}/Products/${id}`,{credentials:"include",});
     const data = await response.json();
     // console.log("datais"+data)
     resolve({data});
@@ -76,6 +76,7 @@ export  function fetchDetails(id) {
 export function createProduct(product){
   return new Promise((async(resolve) =>{
     const response = await fetch(`${server}/Products` , {
+      credentials:"include",
       method:'POST',
       body:JSON.stringify(product),
       headers:{'content-type':'application/json'} , 
@@ -88,6 +89,7 @@ export function createProduct(product){
 export function updateProduct(product){
     return new Promise(async(resolve)=>{
       const response = await fetch(`${server}/products/`+product.id , {
+        credentials:"include",
         method:"PATCH",
         body:JSON.stringify(product),
         headers:{'content-type':'application/json'}
